@@ -16,7 +16,7 @@
 
 <p><b>🎨 灵感图鉴</b></p>
 <p>像刷小红书一样发现 AI 图片 Prompt<br/>一键复制、收藏、投稿到公共市场</p>
-<p>微信小程序 + Chrome 插件 · CloudBase 全栈</p>
+<p>微信小程序 + Chrome 插件</p>
 
 </td>
 <td align="center" width="50%">
@@ -27,7 +27,7 @@
 
 <p><b>✂️ 切切贴</b></p>
 <p>一张表情大图，秒变整套贴纸<br/>浏览器本地运行，图片不上传服务器</p>
-<p>Next.js 静态站 · Cloudflare Pages 部署</p>
+<p>WEB 静态站</p>
 
 </td>
 </tr>
@@ -40,7 +40,7 @@
 
 <p><b>🐻 小画屿</b></p>
 <p>面向 2–5 岁儿童的互动故事绘本<br/>听、看、点，一起长大</p>
-<p>Taro 微信小程序 + 本地 Studio 工作台</p>
+<p>微信小程序</p>
 
 </td>
 <td align="center" width="50%">
