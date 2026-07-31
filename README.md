@@ -1,7 +1,7 @@
 <h1 align="center">Hi there 👋</h1>
 
 <p align="center">
-  <b>独立开发者</b> · 做有趣的小产品
+  <b>I am Will Lee</b> · 做有趣的小产品
 </p>
 
 ---
