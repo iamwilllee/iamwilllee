@@ -10,7 +10,7 @@
 <tr>
 <td align="center" width="50%">
 
-<a href="https://chromewebstore.google.com/detail/灵感图鉴/bplfggaaphangijmidfhgfmjemmbadbo">
+<a href="https://chromewebstore.google.com/detail/灵感图鉴/bplfggaaphangijmidfhgfmjemmbadbo" target="_blank">
 <img src="assets/inspire-promo.png" alt="灵感图鉴" width="420">
 </a>
 
@@ -21,7 +21,7 @@
 </td>
 <td align="center" width="50%">
 
-<a href="https://sticker.iamwilllee.com">
+<a href="https://sticker.iamwilllee.com" target="_blank">
 <img src="assets/sticker-promo.png" alt="切切贴" width="420">
 </a>
 
@@ -34,7 +34,7 @@
 <tr>
 <td align="center" width="50%">
 
-<a href="https://xiaohuayu.iamwilllee.com">
+<a href="https://xiaohuayu.iamwilllee.com" target="_blank">
 <img src="assets/xiaohuayu-og.png" alt="小画屿" width="420">
 </a>
 
