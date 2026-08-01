@@ -14,8 +14,7 @@
 <img src="assets/inspire-promo.png" alt="灵感图鉴" width="420">
 </a>
 
-<p><b>🎨 灵感图鉴</b></p>
-<p>像刷小红书一样发现 AI 图片 Prompt<br/>一键复制、收藏、投稿到公共市场</p>
+<p><b>🎨 灵感图鉴</b> · 发现 / 收藏 / 投稿 AI 图片 Prompt</p>
 <p>微信小程序 + Chrome 插件</p>
 
 </td>
@@ -25,9 +24,8 @@
 <img src="assets/sticker-promo.png" alt="切切贴" width="420">
 </a>
 
-<p><b>✂️ 切切贴</b></p>
-<p>一张表情大图，秒变整套贴纸<br/>浏览器本地运行，图片不上传服务器</p>
-<p>WEB 静态站</p>
+<p><b>✂️ 切切贴</b> · 一张大图秒变整套贴纸</p>
+<p>WEB 静态站 · 本地运行</p>
 
 </td>
 </tr>
@@ -38,8 +36,7 @@
 <img src="assets/xiaohuayu-og.png" alt="小画屿" width="420">
 </a>
 
-<p><b>🐻 小画屿</b></p>
-<p>面向 2–5 岁儿童的互动故事绘本<br/>听、看、点，一起长大</p>
+<p><b>🐻 小画屿</b> · 2–5 岁儿童的互动故事绘本</p>
 <p>微信小程序</p>
 
 </td>
@@ -49,8 +46,7 @@
 <img src="assets/vpet-promo.png" alt="vPet" width="420">
 </a>
 
-<p><b>🐱 vPet</b></p>
-<p>一只生活在你所有设备里的小宠物<br/>不催你完成任务，也不占满屏幕<br/>陪你看看世界、做一点梦</p>
+<p><b>🐱 vPet</b> · 生活在你设备里的小宠物</p>
 <p>Mac 桌面端 · Web</p>
 
 </td>
