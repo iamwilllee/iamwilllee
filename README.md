@@ -46,7 +46,7 @@
 <img src="assets/vpet-promo.png" alt="vPet" width="420">
 </a>
 
-<p><b>🐱 vPet</b> · 生活在你设备里的小宠物</p>
+<p><b>🐱 V·Pet</b> · 生活在你设备里的小宠物</p>
 <p>Mac 桌面端 · Web</p>
 
 </td>
