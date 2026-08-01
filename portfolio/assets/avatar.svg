@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="100" fill="#c4a574"/>
+  <!-- Hair -->
+  <ellipse cx="100" cy="72" rx="58" ry="48" fill="#5a4028"/>
+  <path d="M42 85 Q42 45 100 38 Q158 45 158 85 Q155 60 100 52 Q45 60 42 85Z" fill="#5a4028"/>
+  <!-- Face -->
+  <ellipse cx="100" cy="108" rx="46" ry="50" fill="#e8c9a8"/>
+  <!-- Ears -->
+  <ellipse cx="54" cy="102" rx="10" ry="14" fill="#e8c9a8"/>
+  <ellipse cx="146" cy="102" rx="10" ry="14" fill="#e8c9a8"/>
+  <!-- Glasses frame -->
+  <rect x="62" y="96" width="34" height="26" rx="6" fill="none" stroke="#333" stroke-width="3.5"/>
+  <rect x="104" y="96" width="34" height="26" rx="6" fill="none" stroke="#333" stroke-width="3.5"/>
+  <line x1="96" y1="109" x2="104" y2="109" stroke="#333" stroke-width="3.5"/>
+  <line x1="62" y1="109" x2="50" y2="105" stroke="#333" stroke-width="3"/>
+  <line x1="138" y1="109" x2="150" y2="105" stroke="#333" stroke-width="3"/>
+  <!-- Eyes behind glasses -->
+  <circle cx="79" cy="110" r="4" fill="#333"/>
+  <circle cx="121" cy="110" r="4" fill="#333"/>
+  <!-- Eyebrows -->
+  <path d="M68 90 Q79 86 90 89" stroke="#5a4028" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M110 89 Q121 86 132 90" stroke="#5a4028" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Nose -->
+  <path d="M100 114 Q103 124 100 130" stroke="#d4a882" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Mouth - slight smile -->
+  <path d="M90 144 Q100 152 110 144" stroke="#b88878" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</svg>
