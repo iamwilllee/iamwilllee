@@ -45,11 +45,13 @@
 </td>
 <td align="center" width="50%">
 
-<br/><br/><br/>
+<a href="https://vpet-web.iamwilllee.com" target="_blank">
+<img src="assets/vpet-promo.png" alt="vPet" width="420">
+</a>
 
-<sub>更多项目 coming soon...</sub>
-
-<br/><br/><br/>
+<p><b>🐱 vPet</b></p>
+<p>一只生活在你所有设备里的小宠物<br/>不催你完成任务，也不占满屏幕<br/>陪你看看世界、做一点梦</p>
+<p>Mac 桌面端 · Web</p>
 
 </td>
 </tr>
