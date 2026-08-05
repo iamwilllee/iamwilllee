@@ -32,12 +32,12 @@
 <tr>
 <td align="center" width="50%">
 
-<a href="https://chromewebstore.google.com/detail/灵感图鉴/bplfggaaphangijmidfhgfmjemmbadbo" target="_blank">
+<a href="https://inspire.iamwilllee.com" target="_blank">
 <img src="assets/inspire-promo.png" alt="灵感图鉴" width="420">
 </a>
 
 <p><b>🎨 灵感图鉴</b> · 发现 / 收藏 / 投稿 AI 图片 Prompt</p>
-<p>微信小程序 + Chrome 插件</p>
+<p>WEB · 微信小程序 · Chrome 插件</p>
 
 </td>
 <td align="center" width="50%">
