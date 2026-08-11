@@ -54,12 +54,12 @@
 <tr>
 <td align="center" colspan="2">
 
-<a href="https://github.com/iamwilllee/tale-loop" target="_blank">
+<a href="taleloop.iamwilllee.com" target="_blank">
 <img src="assets/tale-loop-promo.svg" alt="跟读岛 TaleLoop" width="420">
 </a>
 
 <p><b>🏝️ 跟读岛 TaleLoop</b> · 看动画，听懂故事，开口说英语</p>
-<p>微信小程序 · Web · 本地内容 Studio</p>
+<p>微信小程序 · Web</p>
 
 </td>
 </tr>
