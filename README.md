@@ -54,7 +54,7 @@
 <tr>
 <td align="center" colspan="2">
 
-<a href="taleloop.iamwilllee.com" target="_blank">
+<a href="https://taleloop.iamwilllee.com" target="_blank">
 <img src="assets/tale-loop-promo.svg" alt="跟读岛 TaleLoop" width="420">
 </a>
 
