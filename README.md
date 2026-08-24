@@ -6,6 +6,7 @@
 
 ---
 
+<!-- Portfolio 网站的项目卡片由下方表格自动生成，请保持每张卡片的链接、图片和两行文案结构。 -->
 <table>
 <tr>
 <td align="center" width="50%">
@@ -54,7 +55,7 @@
 <tr>
 <td align="center" colspan="2">
 
-<a href="taleloop.iamwilllee.com" target="_blank">
+<a href="https://taleloop.iamwilllee.com" target="_blank">
 <img src="assets/tale-loop-promo.svg" alt="跟读岛 TaleLoop" width="420">
 </a>
 

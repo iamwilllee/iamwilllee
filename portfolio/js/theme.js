@@ -1,6 +1,9 @@
 (function () {
   const KEY = 'portfolio-theme';
   const btn = document.getElementById('themeToggle');
+  const year = document.getElementById('currentYear');
+
+  if (year) year.textContent = String(new Date().getFullYear());
   if (!btn) return;
 
   // Read saved preference, fallback to dark

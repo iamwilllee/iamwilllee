@@ -1,0 +1,45 @@
+name: Sync Portfolio from README
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - README.md
+      - assets/**
+      - scripts/sync-portfolio.mjs
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-portfolio-main
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Sync website projects
+        run: node scripts/sync-portfolio.mjs
+      - name: Verify generated output
+        run: |
+          node --test scripts/sync-portfolio.test.mjs
+          node scripts/sync-portfolio.mjs --check
+      - name: Commit synchronized website
+        run: |
+          if git diff --quiet -- portfolio/index.html portfolio/assets; then
+            echo "Portfolio is already synchronized."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add portfolio/index.html portfolio/assets
+          git commit -m "sync portfolio from README"
+          git push
