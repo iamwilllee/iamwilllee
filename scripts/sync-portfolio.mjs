@@ -60,7 +60,8 @@ export function parseProjects(markdown) {
 export function renderProjects(projects) {
   const useWideEnding = projects.length === 5;
   return projects.map((project, index) => {
-    const wideClass = useWideEnding && index >= projects.length - 2 ? ' project-card--wide' : '';
+    const wideClass = projects.length === 4 || (useWideEnding && index >= projects.length - 2)
+      ? ' project-card--wide' : '';
     const number = String(index + 1).padStart(2, '0');
     return `          <a class="project-card${wideClass}" href="${escapeHtml(project.href)}" target="_blank" rel="noopener">
             <figure class="project-media">

@@ -17,3 +17,11 @@ test('生成可访问的项目卡片 HTML', () => {
   assert.match(html, /alt="演示项目"/);
   assert.match(html, /<span class="project-number">01<\/span>/);
 });
+
+test('四个项目使用两列卡片布局并连续编号', () => {
+  const project = parseProjects(fixture)[0];
+  const html = renderProjects(Array.from({ length: 4 }, () => project));
+  assert.equal((html.match(/project-card--wide/g) ?? []).length, 4);
+  assert.deepEqual([...html.matchAll(/class="project-number">(\d+)</g)].map(match => match[1]),
+    ['01', '02', '03', '04']);
+});
