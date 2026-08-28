@@ -6,6 +6,7 @@
 
 ---
 
+<!-- Portfolio 网站的项目卡片由下方表格自动生成，请保持每张卡片的链接、图片和两行文案结构。 -->
 <table>
 <tr>
 <td align="center" width="50%">
@@ -20,18 +21,6 @@
 </td>
 <td align="center" width="50%">
 
-<a href="https://vpet-web.iamwilllee.com" target="_blank">
-<img src="assets/vpet-promo.png" alt="vPet" width="420">
-</a>
-
-<p><b>🐱 V·Pet</b> · 生活在你设备里的小宠物</p>
-<p>Mac 桌面端 · Web</p>
-
-</td>
-</tr>
-<tr>
-<td align="center" width="50%">
-
 <a href="https://inspire.iamwilllee.com" target="_blank">
 <img src="assets/inspire-promo.png" alt="灵感图鉴" width="420">
 </a>
@@ -40,6 +29,8 @@
 <p>WEB · 微信小程序 · Chrome 插件</p>
 
 </td>
+</tr>
+<tr>
 <td align="center" width="50%">
 
 <a href="https://sticker.iamwilllee.com" target="_blank">
@@ -50,9 +41,7 @@
 <p>WEB 静态站 · 本地运行</p>
 
 </td>
-</tr>
-<tr>
-<td align="center" colspan="2">
+<td align="center" width="50%">
 
 <a href="https://taleloop.iamwilllee.com" target="_blank">
 <img src="assets/tale-loop-promo.svg" alt="跟读岛 TaleLoop" width="420">
