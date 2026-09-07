@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Will Lee 个人主页的每日设计历史版本">
+  <title>Homepage History · Will Lee</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="history-shell">
+    <header class="history-header">
+      <a href="../">Will Lee</a>
+      <a href="../">Current homepage ↗</a>
+    </header>
+    <main>
+      <section class="history-intro">
+        <p>Daily homepage archive</p>
+        <h1>One maker.<br><em>A new frame every day.</em></h1>
+        <div class="history-intro__foot">
+          <p>每天从随机选取的设计参考出发，重新编排同一组真实作品。这里保留每次发布的静态快照。</p>
+          <strong id="versionCount">Loading archive…</strong>
+        </div>
+      </section>
+      <section class="versions" aria-labelledby="versions-title">
+        <div class="versions-heading">
+          <span>Archive</span>
+          <h2 id="versions-title">Previous versions</h2>
+        </div>
+        <ol id="versionList" class="version-list" aria-live="polite"></ol>
+        <noscript>请启用 JavaScript 查看历史版本列表。</noscript>
+      </section>
+    </main>
+    <footer><strong>Will Lee</strong><span>Homepage history</span></footer>
+  </div>
+  <script>
+    const list = document.querySelector('#versionList');
+    const count = document.querySelector('#versionCount');
+
+    fetch('./versions.json')
+      .then((response) => {
+        if (!response.ok) throw new Error('Unable to load archive');
+        return response.json();
+      })
+      .then(({ versions }) => {
+        count.textContent = `${versions.length} published version${versions.length === 1 ? '' : 's'}`;
+        versions.forEach((version, index) => {
+          const item = document.createElement('li');
+          const link = document.createElement('a');
+          const number = document.createElement('span');
+          const copy = document.createElement('div');
+          const title = document.createElement('h3');
+          const detail = document.createElement('p');
+          const date = document.createElement('time');
+          const arrow = document.createElement('span');
+
+          link.href = version.path;
+          number.textContent = String(versions.length - index).padStart(2, '0');
+          number.className = 'version-number';
+          title.textContent = version.title;
+          detail.textContent = version.concept || `Inspired via ${version.source}`;
+          date.dateTime = version.date;
+          date.textContent = version.date;
+          arrow.textContent = '↗';
+          arrow.className = 'version-arrow';
+
+          copy.append(title, detail);
+          link.append(number, copy, date, arrow);
+          item.append(link);
+          list.append(item);
+        });
+      })
+      .catch(() => {
+        count.textContent = 'Archive unavailable';
+        list.textContent = '暂时无法载入历史版本。';
+      });
+  </script>
+</body>
+</html>

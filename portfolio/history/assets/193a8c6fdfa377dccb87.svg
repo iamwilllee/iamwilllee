@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">跟读岛 TaleLoop</title>
+  <desc id="desc">看动画，听懂故事，开口说一句英语。</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#effaff"/>
+      <stop offset="0.52" stop-color="#e8f6ff"/>
+      <stop offset="1" stop-color="#fff2d4"/>
+    </linearGradient>
+    <linearGradient id="button" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#736df0"/>
+      <stop offset="1" stop-color="#5048dc"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#252357" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#sky)"/>
+  <circle cx="1040" cy="112" r="66" fill="#ffd66d"/>
+  <circle cx="1040" cy="112" r="84" fill="none" stroke="#ffd66d" stroke-opacity="0.22" stroke-width="20"/>
+
+  <g fill="#fff" opacity="0.86">
+    <rect x="786" y="132" width="170" height="42" rx="21"/>
+    <circle cx="830" cy="132" r="38"/>
+    <circle cx="900" cy="125" r="48"/>
+    <rect x="1000" y="238" width="132" height="34" rx="17" opacity="0.8"/>
+    <circle cx="1036" cy="238" r="31" opacity="0.8"/>
+    <circle cx="1090" cy="233" r="39" opacity="0.8"/>
+  </g>
+
+  <g transform="translate(74 64)">
+    <g transform="translate(0 2)">
+      <ellipse cx="28" cy="38" rx="27" ry="10" fill="#ffb64d" transform="rotate(-6 28 38)"/>
+      <rect x="23" y="8" width="7" height="31" rx="4" fill="#387cc5" transform="rotate(10 26 23)"/>
+      <text x="2" y="21" fill="#4388cf" font-family="Arial, sans-serif" font-size="28">✦</text>
+      <circle cx="52" cy="13" r="17" fill="#655ee2"/>
+      <path d="M44 13h3m2 0h3m2 0h3" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <text x="78" y="36" fill="#17213e" font-family="Arial, 'PingFang SC', sans-serif" font-size="34" font-weight="800">跟读岛</text>
+    <text x="202" y="35" fill="#655ee2" font-family="Arial, sans-serif" font-size="18" font-weight="700">TaleLoop</text>
+    <text x="79" y="58" fill="#64708c" font-family="Arial, sans-serif" font-size="14">Watch. Listen. Say it back.</text>
+  </g>
+
+  <g transform="translate(76 185)">
+    <text fill="#655ee2" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">ENGLISH STORIES FOR LITTLE EXPLORERS</text>
+    <text y="70" fill="#17213e" font-family="Arial, 'PingFang SC', sans-serif" font-size="58" font-weight="800">看动画，听懂故事，</text>
+    <text y="140" fill="#655ee2" font-family="Arial, 'PingFang SC', sans-serif" font-size="58" font-weight="800">开口说一句英语。</text>
+    <rect y="181" width="244" height="62" rx="31" fill="url(#button)" filter="url(#shadow)"/>
+    <text x="34" y="221" fill="#fff" font-family="Arial, 'PingFang SC', sans-serif" font-size="22" font-weight="700">Watch · Listen · Say</text>
+  </g>
+
+  <g transform="translate(710 330)">
+    <path d="M0 178c88-102 274-135 424-58 42 22 62 54 57 84H-14c-9-9-1-18 14-26z" fill="#80d6ef" opacity="0.44"/>
+    <path d="M23 141c92-74 271-94 401-27 25 13 43 32 51 53-137 54-330 55-471 4-4-11 3-21 19-30z" fill="#f7c45c"/>
+    <path d="M44 123c94-65 253-73 366-17 24 12 42 27 51 44-126 35-295 34-425-4-3-8 0-16 8-23z" fill="#72c890"/>
+    <path d="M307 90c36-41 88-45 124-9 17 17 27 42 30 69-57 17-124 21-184 12 4-29 13-53 30-72z" fill="#67b94e"/>
+    <path d="M172 115c9-56 18-100 31-132" fill="none" stroke="#a86d32" stroke-width="15" stroke-linecap="round"/>
+    <path d="M205-15c-42-28-83-15-102 17 36-3 69 5 94 24-7-31-2-62 15-91 19 30 27 60 23 89 28-22 61-31 99-28-21-34-64-44-104-15" fill="#4aa75a"/>
+  </g>
+
+  <circle cx="1130" cy="550" r="4" fill="#655ee2" opacity="0.5"/>
+  <circle cx="1098" cy="520" r="7" fill="#ffb64d" opacity="0.7"/>
+  <circle cx="1154" cy="505" r="5" fill="#4388cf" opacity="0.55"/>
+</svg>

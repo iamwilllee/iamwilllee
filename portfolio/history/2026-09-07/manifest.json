@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-07",
+  "random": {
+    "seed": "1e32d060d4b96dba",
+    "source": "siteinspire",
+    "page": 9,
+    "position": 13,
+    "scrolls": 3
+  },
+  "reference": {
+    "name": "Geste",
+    "galleryUrl": "https://www.siteinspire.com/website/13253-geste",
+    "websiteUrl": "https://geste.co/"
+  },
+  "interpretation": [
+    "minimal utility navigation",
+    "large-scale editorial typography",
+    "generous whitespace",
+    "full-width visual rhythm"
+  ],
+  "contentSource": "../README.md",
+  "contentPolicy": "README.md remains the only source for project names, descriptions, links, and images."
+}
