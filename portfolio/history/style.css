@@ -152,3 +152,14 @@ footer strong { color: var(--ink); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; }
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --page: #151513;
+    --ink: #f1ede4;
+    --muted: #aaa49a;
+    --line: rgba(241, 237, 228, .15);
+    --accent: #91acd0;
+  }
+}

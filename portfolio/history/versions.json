@@ -1,6 +1,16 @@
 {
   "versions": [
     {
+      "date": "2026-09-08",
+      "title": "Pomelo",
+      "concept": "midnight blue with vivid pink accents · centered sans-serif typography · fine-line framing and geometric details · compact two-column product panels",
+      "source": "awwwards",
+      "referenceUrl": "https://pomelo.la/en",
+      "galleryUrl": "https://www.awwwards.com/sites/pomelo",
+      "seed": "97ffde5e37045ec7",
+      "path": "./2026-09-08/"
+    },
+    {
       "date": "2026-09-07",
       "title": "Geste",
       "concept": "minimal utility navigation · large-scale editorial typography · generous whitespace · full-width visual rhythm",
