@@ -1,6 +1,16 @@
 {
   "versions": [
     {
+      "date": "2026-09-11",
+      "title": "OpenScreenShot",
+      "concept": "oversized left-aligned black typography · high-contrast monochrome palette with electric blue accents · fine gray borders and edge-to-edge utility panels · pill-shaped controls and compact monospace labels",
+      "source": "onepagelove",
+      "referenceUrl": "https://openscreenshot.app/",
+      "galleryUrl": "https://onepagelove.com/full-page-screenshot-in-one-click",
+      "seed": "90e3e895559ce65c",
+      "path": "./2026-09-11/"
+    },
+    {
       "date": "2026-09-08",
       "title": "Pomelo",
       "concept": "midnight blue with vivid pink accents · centered sans-serif typography · fine-line framing and geometric details · compact two-column product panels",
