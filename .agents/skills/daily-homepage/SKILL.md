@@ -1,6 +1,6 @@
 ---
 name: daily-homepage
-description: Generate, validate, archive, commit, push, and verify a new daily design for the iamwilllee portfolio homepage. Use for the scheduled daily homepage publication or when the user explicitly asks to run the daily homepage workflow.
+description: Generate, validate, commit, push, and verify a new daily design for the iamwilllee portfolio homepage. Use for the scheduled daily homepage publication or when the user explicitly asks to run the daily homepage workflow.
 ---
 
 # Daily Homepage
@@ -22,15 +22,13 @@ Create one fresh visual treatment for the portfolio while keeping `README.md` as
 1. Run `corepack pnpm pick:inspiration` and preserve its complete JSON result.
 2. Open the selected listing page with a real browser, go to the generated page, and select the generated card position. Do not default to the first card.
 3. Resolve and visit the selected live site. If the listing or site is unavailable, redraw, at most three times.
-4. Compare `portfolio/history/versions.json`. Do not reuse the same reference URL from the recent archive.
-5. Record the draw, reference name and URLs, and abstract interpretation in `portfolio/design-manifest.json`.
+4. Record the draw, reference name and URLs, and abstract interpretation in `portfolio/design-manifest.json`.
 
-## Design and archive
+## Design
 
 1. Run `corepack pnpm sync:portfolio` so website content matches `README.md`.
 2. Redesign `portfolio/index.html` and `portfolio/css/style.css`; reuse `portfolio/js/theme.js` when possible.
-3. Keep a visible `History` link to `history/` and preserve accessible focus states, semantic headings, reduced-motion behavior, and light/dark theme support.
-4. Run `corepack pnpm archive:portfolio -- --date YYYY-MM-DD` using the current Asia/Shanghai date. This freezes the published page under `portfolio/history/YYYY-MM-DD/` and updates the archive index.
+3. Preserve accessible focus states, semantic headings, reduced-motion behavior, and light/dark theme support.
 
 ## Verify before publishing
 
@@ -39,15 +37,14 @@ Run:
 ```sh
 corepack pnpm test
 corepack pnpm check:portfolio
-corepack pnpm check:history
 ```
 
-Preview the site and visually inspect the homepage, history index, and new snapshot at 1280px, 375px, and 320px. Check horizontal overflow, image loading, navigation, archived assets, and dark mode. Fix every regression introduced by this run.
+Preview the site and visually inspect the homepage at 1280px, 375px, and 320px. Check horizontal overflow, image loading, navigation, assets, and dark mode. Fix every regression introduced by this run.
 
 ## Publish safely
 
 1. Fetch `origin/main`. If it advanced, rebase once and rerun all verification. Stop on conflicts instead of guessing.
-2. Commit only the focused daily homepage, manifest, and history files with `daily homepage: YYYY-MM-DD`.
+2. Commit only the focused daily homepage and manifest files with `daily homepage: YYYY-MM-DD`.
 3. Push `HEAD:main` without force.
 4. Verify that `origin/main` contains the commit.
 5. Verify the `Deploy Portfolio to GitHub Pages` workflow and the resulting Pages deployment. Report a failed or missing deployment honestly; a successful push alone is not a successful publication.

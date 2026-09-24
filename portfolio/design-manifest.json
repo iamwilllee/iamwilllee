@@ -1,37 +1,37 @@
 {
-  "date": "2026-09-12",
+  "date": "2026-09-24",
   "random": {
-    "seed": "37c8f27847d9a8ed",
-    "source": "siteinspire",
-    "sourceLabel": "SiteInspire",
-    "page": 24,
+    "seed": "90e3e895559ce65c",
+    "source": "onepagelove",
+    "sourceLabel": "One Page Love",
+    "page": 20,
     "position": 3,
-    "listingUrl": "https://www.siteinspire.com/websites?page=24"
+    "listingUrl": "https://onepagelove.com/inspiration?page=20"
   },
   "reference": {
-    "name": "Matija Gabrilo",
-    "galleryUrl": "https://www.siteinspire.com/website/12835-matija-gabrilo",
-    "websiteUrl": "https://mgabrilo.work/"
+    "name": "OpenScreenShot",
+    "galleryUrl": "https://onepagelove.com/full-page-screenshot-in-one-click",
+    "websiteUrl": "https://openscreenshot.app/"
   },
   "interpretation": [
-    "expansive whitespace interrupted by compact image fields",
-    "tiny monospaced navigation and tabular project metadata",
-    "warm monochrome palette with a single safety-orange accent",
-    "asymmetric editorial rows with hairline dividers"
+    "oversized left-aligned black typography",
+    "high-contrast monochrome palette with electric blue accents",
+    "fine gray borders and edge-to-edge utility panels",
+    "pill-shaped controls and compact monospace labels"
   ],
   "resolution": {
-    "listingTitle": "The Best Websites | Page 24 | Siteinspire",
-    "cardCount": 35,
+    "listingTitle": "One Page Website Inspiration",
+    "cardCount": 8,
     "selectedPosition": 3,
-    "selectedCardLabel": "Matija Gabrilo",
-    "liveTitle": "Practice of Matija Gabrilo",
+    "selectedCardLabel": "OpenScreenShot",
+    "liveTitle": "Full Page Screenshot in One Click — OpenScreenShot",
     "recentReferenceUrlsChecked": [
-      "https://openscreenshot.app/",
       "https://pomelo.la/en",
       "https://geste.co/"
     ],
     "redraws": 2
   },
   "contentSource": "../README.md",
-  "contentPolicy": "README.md remains the only source for project names, descriptions, links, and images."
+  "contentPolicy": "README.md remains the only source for project names, descriptions, links, and images.",
+  "note": "Restored the 2026-09-11 OpenScreenShot-inspired visual design as the permanent homepage at the user’s request."
 }

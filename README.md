@@ -48,7 +48,19 @@
 </a>
 
 <p><b>🏝️ 跟读岛 TaleLoop</b> · 看动画，听懂故事，开口说英语</p>
-<p>微信小程序 · Web</p>
+<p>Web</p>
+
+</td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+
+<a href="https://xiaoshiye.iamwilllee.com" target="_blank">
+<img src="assets/xiaoshiye-hero.jpg" alt="小拾页成长纪念册" width="840">
+</a>
+
+<p><b>📖 小拾页</b> · 给一家人的私密成长纪念册</p>
+<p>微信小程序</p>
 
 </td>
 </tr>
