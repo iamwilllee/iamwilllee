@@ -100,7 +100,7 @@ function publicProjects(state,target){
   if(!a)throw Error(`请先在项目详情确认「${p.name}」的展示资料。`);
   const privateLink=p.repository.private&&a.url.startsWith(p.repository.html_url);
   const url=privateLink?'':safeUrl(a.url)||(p.repository.private?'':safeUrl(p.repository.html_url));
-  return {repo:p.repo,id:p.id,name:a.name,description:a.description,platform:a.platform,url,cover:a.cover,private:!!p.repository.private,html_url:p.repository.html_url,language:p.repository.language||'',confirmedAt:a.confirmedAt};
+  return {repo:p.repo,id:p.id,name:a.name,description:a.description,platform:a.platform,url,cover:target==='site'&&p.siteCover?p.siteCover.file:a.cover,imageSource:target==='site'&&p.siteCover?p.siteCover.source:undefined,private:!!p.repository.private,html_url:p.repository.html_url,language:p.repository.language||'',confirmedAt:a.confirmedAt};
  });
 }
 export function outputSignature(state,target){
@@ -187,6 +187,25 @@ export async function importDraft(workspace,{repo,requestId,folder,sourceSha}){
   const cover=imagePath(markdown);p.draft={root:relative,hash,cover:cover&&!/^https?:/.test(cover)?`${relative}/${cover}`:null,theme:request.design.direction,importedAt:new Date().toISOString(),published:false};
   p.sourceSha=sourceSha||p.sourceSha;p.sourcePushedAt=p.repository.pushed_at;p.sourceChanged=false;
   request.status='completed';request.completedAt=new Date().toISOString();request.resultHash=hash;
+ });
+}
+export async function importSiteCovers(workspace,manifestFile,{includeProfile=false}={}){
+ const manifest=await readJson(resolve(manifestFile));
+ if(!Array.isArray(manifest?.projects)||!manifest.projects.length)throw Error('配图清单不能为空。');
+ return writeOperation(workspace,undefined,async(state,root)=>{
+  const seen=new Set(),prepared=[];
+  for(const entry of manifest.projects){
+   const p=projectFor(state,entry.repo);
+   if(seen.has(p.repo))throw Error('配图清单中项目重复。');seen.add(p.repo);
+   if(!p.approved)throw Error(`请先确认「${p.name}」的公开展示资料。`);
+   const file=await safeFile(dirname(resolve(manifestFile)),entry.file),bytes=await readFile(file);
+   if(bytes.length<24||bytes.subarray(0,8).toString('hex')!=='89504e470d0a1a0a'||bytes.toString('ascii',12,16)!=='IHDR')throw Error('站点配图需要 PNG 文件。');
+   const width=bytes.readUInt32BE(16),height=bytes.readUInt32BE(20);
+   if(width<1280||height<720||Math.abs(height-width*9/16)>1)throw Error('站点配图需要至少 1280×720 的 16:9 图片（允许 1px 取整误差）。');
+   const hash=createHash('sha256').update(bytes).digest('hex');
+   prepared.push({p,bytes,cover:{file:`projects/${p.id}/approved/site-${hash.slice(0,16)}/cover.png`,hash,width,height,theme:text(entry.theme||'',100),source:'AI 概念配图',confirmedAt:new Date().toISOString()}});
+  }
+  for(const {p,bytes,cover}of prepared){await mkdir(dirname(join(root,cover.file)),{recursive:true});await writeFile(join(root,cover.file),bytes);p.siteCover=cover;if(includeProfile)p.approved.cover=cover.file;}
  });
 }
 export function clientState(state){

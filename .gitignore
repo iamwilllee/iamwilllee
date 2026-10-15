@@ -4,5 +4,6 @@ node_modules/
 .portfolio-builder/
 .portfolio-workbench/
 .readme-batch/
+.preview/
 experiments/**/.preview/
 experiments/github-readmes/

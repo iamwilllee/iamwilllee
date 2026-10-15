@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, cp, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { initialize, act, readState, stateRoot, importDraft, clientState } from './workbench.mjs';
+import { initialize, act, readState, stateRoot, importDraft, importSiteCovers, clientState } from './workbench.mjs';
 import { parseProjects } from '../../../scripts/sync-portfolio.mjs';
 
 const image='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="#315944"/></svg>';
@@ -11,6 +11,8 @@ async function fixture(){
  const root=await mkdtemp(join(tmpdir(),'portfolio-workbench-'));
  await mkdir(join(root,'.portfolio-builder'),{recursive:true});await mkdir(join(root,'scripts'),{recursive:true});await mkdir(join(root,'assets'),{recursive:true});
  await cp(new URL('../../../scripts/sync-portfolio.mjs',import.meta.url),join(root,'scripts/sync-portfolio.mjs'));
+ await mkdir(join(root,'skills/portfolio-builder/scripts'),{recursive:true});
+ await cp(new URL('../../portfolio-builder/scripts/core.mjs',import.meta.url),join(root,'skills/portfolio-builder/scripts/core.mjs'));
  await writeFile(join(root,'assets/old.svg'),image);
  await writeFile(join(root,'README.md'),'<table><tr><td><a href="https://xiaohuayu.example"><img src="assets/old.svg" alt="小画屿"></a><p><b>小画屿</b> · 已确认的公开介绍</p><p>Web</p></td></tr></table>');
  const repositories=[{id:1,name:'xiaohuayu',full_name:'owner/xiaohuayu',private:true,html_url:'https://github.com/owner/xiaohuayu',default_branch:'main',pushed_at:'2026-01-01'}, {id:2,name:'runo',full_name:'owner/runo',private:true,html_url:'https://github.com/owner/runo',default_branch:'main',pushed_at:'2026-01-01'}];
@@ -80,5 +82,36 @@ test('stale writes, changed locked covers and failed generation preserve the exi
   await rm(join(stateRoot(root),next.projects[1].approved.cover));
   await assert.rejects(act(root,{type:'generate-site',revision:next.revision}));
   assert.equal(await readFile(join(stateRoot(root),'site/index.html'),'utf8'),oldHtml);
+ }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('website covers update independently of locked README covers and survive adoption and regeneration',async()=>{
+ const {root,state}=await fixture();
+ try{
+  const p=state.projects[1],manifest=join(root,'covers.json');
+  const png=await readFile(new URL('../../../assets/project-covers/runo.png',import.meta.url));
+  await writeFile(join(root,'cover.png'),png);
+  await writeFile(manifest,JSON.stringify({projects:[{repo:p.repo,file:'cover.png',theme:'Nordic'}]}));
+  let next=await act(root,{type:'config',revision:state.revision,profile:state.profile,profileRepos:[p.repo],siteRepos:state.siteRepos});
+  next=await act(root,{type:'generate-site',revision:next.revision});
+  next=await act(root,{type:'generate-profile',revision:next.revision});
+  const originalProfile=await readFile(join(stateRoot(root),'profile/README.md'),'utf8');
+  next=await importSiteCovers(root,manifest);
+  assert.equal(next.projects[1].draft.cover,p.draft.cover);
+  assert.deepEqual(next.projects[1].approved,p.approved);
+  assert.equal(clientState(next).results.site.stale,true);
+  assert.equal(clientState(next).results.profile.stale,false);
+  next=await act(root,{type:'adopt',repo:p.repo,project:input(p),revision:next.revision});
+  const siteCover=next.projects[1].siteCover;
+  next=await act(root,{type:'generate-site',revision:next.revision});
+  const output=await readFile(join(stateRoot(root),'site/assets/2.png'));
+  assert.deepEqual(output,png);assert.deepEqual(next.projects[1].siteCover,siteCover);
+  assert.equal(await readFile(join(stateRoot(root),'profile/README.md'),'utf8'),originalProfile);
+  next=await importSiteCovers(root,manifest,{includeProfile:true});
+  assert.equal(next.projects[1].approved.cover,siteCover.file);
+  assert.equal(clientState(next).results.profile.stale,true);
+  png.writeUInt32BE(1200,16);await writeFile(join(root,'cover.png'),png);
+  await assert.rejects(importSiteCovers(root,manifest),/16:9/);
+  assert.deepEqual((await readState(root)).projects[1].siteCover,next.projects[1].siteCover);
  }finally{await rm(root,{recursive:true,force:true});}
 });

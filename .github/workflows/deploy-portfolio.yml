@@ -4,8 +4,12 @@ on:
   push:
     branches: [main]
     paths:
+      - README.md
+      - assets/project-covers/**
       - portfolio/**
       - scripts/**
+      - skills/portfolio-builder/**
+      - skills/github-portfolio/**
       - package.json
       - .github/workflows/deploy-portfolio.yml
   workflow_dispatch:
@@ -29,7 +33,8 @@ jobs:
           node-version: 22
       - name: Verify portfolio
         run: |
-          node --test scripts/*.test.mjs
+          node --test scripts/*.test.mjs skills/portfolio-builder/scripts/*.test.mjs skills/github-portfolio/scripts/*.test.mjs
+          node skills/readme-designer/scripts/validate.mjs README.md
           node scripts/sync-portfolio.mjs --check
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4

@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-10-15",
+  "purpose": "个人站点项目配图",
+  "ratio": "16:9",
+  "requestedSize": "1600x900",
+  "tool": "built-in image_gen",
+  "sourceType": "AI 概念配图",
+  "projects": [
+    {
+      "repo": "iamwilllee/xiaohuayu",
+      "file": "xiaohuayu.png",
+      "theme": "童话绘本",
+      "prompt": "Use case: illustration-story. Asset type: portfolio website project cover, landscape EXACT 16:9 aspect ratio, 1600 by 900 pixels. Full-bleed artwork reaching every edge; no outer margin, no border, no letterbox strips, no text or lettering, no watermark, no UI screenshots. Subject readable at small card size, central composition with modest crop-safe margin inside the scene. A polished editorial image, pleasantly tactile materials, balanced daylight, a clear focal point, not a busy collage. Project: 小画屿, interactive picture stories for children age 2–5 and their parents. A beautiful immersive children's storybook illustration in richly textured gouache and colored pencil, a small island-like woodland clearing, friendly little bear and rabbit exploring an open illustrated storybook together with a tiny hedgehog near a winding path. Rounded expressive characters, engaging but gentle adventure, forest green, honey ochre and warm cream, layered foliage across the full frame, sunlit storybook magic. The actual scene fills the whole 16:9 frame, not a book mockup or a framed print. No words, no signage.",
+      "width": 1672,
+      "height": 940
+    },
+    {
+      "repo": "iamwilllee/tale-loop",
+      "file": "tale-loop.png",
+      "theme": "岛屿动画",
+      "prompt": "Use case: stylized-concept. Asset type: portfolio website project cover, landscape EXACT 16:9 aspect ratio, 1600 by 900 pixels. Full-bleed artwork reaching every edge; no outer margin, no border, no letterbox strips, no text or lettering, no watermark, no UI screenshots. Subject readable at small card size, central composition with modest crop-safe margin inside the scene. A polished editorial image, pleasantly tactile materials, balanced daylight, a clear focal point, not a busy collage. Project: TaleLoop, learning English through short animated stories, listening and speaking. A delightful animated island scene, a softly sculpted little turquoise island with a story path, palm tree, golden sun and gentle clouds, an open storybook at the center with a little bird listening, and a few soft translucent sound-wave arcs suggesting speaking and listening. Premium playful 3D clay-and-paper animation still, sky blue, lagoon teal, butter yellow, a little lavender. Environment fills the canvas, warm friendly sunlight, appealing carefully composed miniature storytelling world, no isolated object on a plain blank background.",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "repo": "iamwilllee/xiaoshiye",
+      "file": "xiaoshiye.png",
+      "theme": "家庭手账",
+      "prompt": "Use case: photorealistic-natural. Asset type: portfolio website project cover, landscape EXACT 16:9 aspect ratio, 1600 by 900 pixels. Full-bleed artwork reaching every edge; no outer margin, no border, no letterbox strips, no text or lettering, no watermark, no UI screenshots. Subject readable at small card size, central composition with modest crop-safe margin inside the scene. A polished editorial image, pleasantly tactile materials, balanced daylight, a clear focal point, not a busy collage. Project: 小拾页, a private family memory scrapbook for childhood moments. Photorealistic Nordic editorial close-up of an open clothbound family scrapbook on an ivory linen surface, a parent's hand gently placing a little pressed leaf beside a child's colorful crayon drawing and a small unlettered instant-photo print of a childhood outing. Natural paper fibers, warm cream paper, sage-green binding, soft ochre accents, honest imperfections, tender intimate everyday family atmosphere. Fill the frame with the physical scrapbook pages, a little fabric and afternoon light, no excessive empty space, no readable text, no visible faces, no software devices.",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "repo": "iamwilllee/inspire",
+      "file": "inspire.png",
+      "theme": "艺术画廊",
+      "prompt": "Use case: stylized-concept. Asset type: portfolio website project cover, landscape EXACT 16:9 aspect ratio, 1600 by 900 pixels. Full-bleed artwork reaching every edge; no outer margin, no border, no letterbox strips, no text or lettering, no watermark, no UI screenshots. Subject readable at small card size, central composition with modest crop-safe margin inside the scene. A polished editorial image, pleasantly tactile materials, balanced daylight, a clear focal point, not a busy collage. Project: 灵感图鉴, collecting and discovering AI visual prompts and art inspiration. A contemporary editorial art-gallery composition with a few large overlapping unlettered art prints and translucent colored glass panels on a warm white gallery surface. One vivid cobalt abstract ocean print, one coral and lilac organic sculpture photograph, and one textured botanical composition; creative visual variety but a single harmonious arrangement. Refined vibrant art direction, cobalt blue, coral orange, pale lilac and cream, soft directional shadows and high-end paper textures. Full-frame overhead/oblique close-up; not website mockups, no phones or browser windows, no words. Avoid a generic beige desk or office scene.",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "repo": "iamwilllee/sticker-web",
+      "file": "sticker-web.png",
+      "theme": "手作贴纸",
+      "prompt": "Use case: stylized-concept. Asset type: portfolio website project cover, landscape EXACT 16:9 aspect ratio, 1600 by 900 pixels. Full-bleed artwork reaching every edge; no outer margin, no border, no letterbox strips, no text or lettering, no watermark, no UI screenshots. Subject readable at small card size, central composition with modest crop-safe margin inside the scene. A polished editorial image, pleasantly tactile materials, balanced daylight, a clear focal point, not a busy collage. Project: 切切贴, splitting a large image into a ready-to-use sticker set, browser-based creative tool. A cheerful tactile cut-paper sticker workshop in a clean overhead composition: one square sticker sheet at the center, divided into a neat 3-by-3 grid of playful friendly expressions and simple fruit/animal doodles; a few of the die-cut stickers are peeled and arranged beside the sheet with realistically curled paper edges. A small pair of mint craft scissors is placed nearby to suggest cutting. Butter yellow work surface, mint, peach coral, lilac accents, joyful restrained stationery photography mixed with polished paper-craft illustration. Everything is visual, no numbers, no words, no application screen.",
+      "width": 1672,
+      "height": 940
+    },
+    {
+      "repo": "iamwilllee/runo",
+      "file": "runo.png",
+      "theme": "北欧工作台",
+      "prompt": "Use case: photorealistic-natural. Asset type: portfolio website project cover, landscape EXACT 16:9 aspect ratio, 1600 by 900 pixels. Full-bleed artwork reaching every edge; no outer margin, no border, no letterbox strips, no text or lettering, no watermark, no UI screenshots. Subject readable at small card size, central composition with modest crop-safe margin inside the scene. A polished editorial image, pleasantly tactile materials, balanced daylight, a clear focal point, not a busy collage. Project: Runo, a macOS local project launcher and project dashboard. Photorealistic restrained Nordic workspace editorial photograph: a light oak desk, a closed silver laptop, one small dark forest-green rounded-square app tile with a simple mint geometric launch-arrow abstract mark (no letters), and three neatly arranged slim mint project cards on the desk to suggest launching local projects. Quiet ivory plaster wall, soft daylight and plant shadow, natural wood and ceramic detail, calm practical thoughtful mood. Full-frame close composition, objects large enough to read at card size, modest space around them, no readable words, no fabricated software interface, no added corporate logo.",
+      "width": 1672,
+      "height": 941
+    }
+  ]
+}
