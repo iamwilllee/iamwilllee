@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "mode": "project",
+  "project": "Runo",
+  "repository": "iamwilllee/runo",
+  "sourceCommit": "ce302e808573800c463d0df6fc8d57122cab34de",
+  "release": "0.12.1",
+  "theme": {
+    "id": "nordic-catalog",
+    "name": "北欧目录 / 宜家风格",
+    "reference": "https://www.ikea.cn/cn/zh/rooms/bedroom/gallery/",
+    "palette": { "paper": "#f5f2ea", "oak": "#d8b68c", "forest": "#132c24", "mint": "#9ef3c4", "ink": "#1f2328" },
+    "direction": "自然光、浅木与陶瓷的生活场景；保留 Runo 既有绿色品牌，产品说明保留为原生文字。",
+    "layout": "主题封面、原生定位、截图加说明、三步上手、折叠开发文档"
+  },
+  "assets": [
+    { "path": "assets/cover.png", "kind": "ai-concept", "generator": "built-in imagegen", "prompt": "art-direction.md", "locked": true },
+    { "path": "assets/product-labels.svg", "kind": "code-native", "source": "package.json / docs/install.md", "locked": false },
+    { "path": "assets/sidebar.png", "kind": "existing-ui-capture", "source": "quick-open/.qa/runo-sidebar-current.png", "data": "隔离演示项目", "locked": true },
+    { "path": "assets/pure-mode.png", "kind": "existing-ui-capture", "source": "quick-open/.qa/pure-mode-360.png", "data": "界面演示数据", "locked": true },
+    { "path": "assets/floating.png", "kind": "existing-ui-capture", "source": "quick-open/.qa/floating-web-360.png", "data": "界面演示数据", "locked": true }
+  ]
+}

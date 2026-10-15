@@ -1,3 +1,8 @@
 .workbuddy/
 node_modules/
 .DS_Store
+.portfolio-builder/
+.portfolio-workbench/
+.readme-batch/
+experiments/**/.preview/
+experiments/github-readmes/
