@@ -53,6 +53,25 @@
       "prompt": "Use case: photorealistic-natural. Asset type: portfolio website project cover, landscape EXACT 16:9 aspect ratio, 1600 by 900 pixels. Full-bleed artwork reaching every edge; no outer margin, no border, no letterbox strips, no text or lettering, no watermark, no UI screenshots. Subject readable at small card size, central composition with modest crop-safe margin inside the scene. A polished editorial image, pleasantly tactile materials, balanced daylight, a clear focal point, not a busy collage. Project: Runo, a macOS local project launcher and project dashboard. Photorealistic restrained Nordic workspace editorial photograph: a light oak desk, a closed silver laptop, one small dark forest-green rounded-square app tile with a simple mint geometric launch-arrow abstract mark (no letters), and three neatly arranged slim mint project cards on the desk to suggest launching local projects. Quiet ivory plaster wall, soft daylight and plant shadow, natural wood and ceramic detail, calm practical thoughtful mood. Full-frame close composition, objects large enough to read at card size, modest space around them, no readable words, no fabricated software interface, no added corporate logo.",
       "width": 1672,
       "height": 941
+    },
+    {
+      "repo": "iamwilllee/aster",
+      "file": "aster.png",
+      "theme": "Sage 模块构筑",
+      "prompt": "Use case: stylized-concept. Asset type: AI conceptual hero cover for the README of Aster, an open-source product foundation for AI-assisted developers. Create a full-bleed 16:9 horizontal artwork, approximately 1600x900. A beautifully precise miniature architectural composition of modular building blocks and connected translucent green planes, representing a reliable starting foundation from which many individual web products can be built. Small distinct groups joined by purposeful paths, a steady broad foundation, one elegant upward branching structure, tactile pale ceramic, forest green and sage glass, thin technical drafting lines integrated into the ivory surface. Calm analytical premium editorial style, clear geometry, soft daylight with crisp soft shadows, restrained real materials, generous purposeful composition yet details extending to every edge. This is conceptual artwork, not a product screenshot. No text, letters, code, labels, diagrams with writing, generated application UI, new logo, browser windows, borders, blank strips, watermarks, or fake feature claims. Keep the focal architecture clear at small card size. Preserve Aster's existing sage/forest-green identity; do not replace it with neon or purple.",
+      "width": 1672,
+      "height": 941,
+      "sourceType": "AI 概念配图"
+    },
+    {
+      "repo": "iamwilllee/makenue",
+      "file": "makenue.png",
+      "theme": "独立创作者纸上展厅",
+      "prompt": "Use case: photorealistic-natural. Asset type: AI conceptual hero cover for Makenue, an independent makers' platform for discovering products and presenting a maker's work, supporter plans and fixed-scope services. Full-bleed 16:9 landscape, approximately 1600x900, edge-to-edge editorial photograph of a thoughtfully curated small maker exhibition on a warm ivory studio surface. Several beautifully arranged cream paper product folios and folded standing display cards, a central open portfolio booklet with abstract green and terracotta visual art, small tactile crafted product objects, sophisticated forest-green cloth and subtle sage accents, natural shadows and warm side light. Express a maker gathering their work into a coherent public portfolio: approachable, quiet, contemporary and purposeful. Interesting close composition fills the canvas, clear focal point, premium paper textures and gentle human warmth without people. Different from a laptop office desk; no software screenshot or invented UI. No readable words, titles, numbers, price tags, payment icons, logos, borders, letterboxing, watercolor book characters, watermarks. Do not imply checkout, real commercial transactions or an operational booking service.",
+      "width": 1672,
+      "height": 941,
+      "sourceType": "AI 概念配图"
     }
-  ]
+  ],
+  "updatedAt": "2026-10-28"
 }
