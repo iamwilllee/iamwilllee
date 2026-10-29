@@ -75,7 +75,7 @@ export async function sync({ workspace = repositoryRoot, check = checkOnly } = {
   const markdown = await readFile(join(workspace, 'README.md'), 'utf8');
   const projects = parseProjects(markdown);
   const files = new Map([['index.html', Buffer.from(renderPortfolio(markdown))]]);
-  for (const file of ['site.css', 'site.js']) files.set(file, await readFile(new URL(`../skills/portfolio-builder/assets/${file}`, import.meta.url)));
+  for (const file of ['site.css', 'site.js', 'favicon.svg']) files.set(file, await readFile(new URL(`../skills/portfolio-builder/assets/${file}`, import.meta.url)));
   for (const project of projects) {
     const target = `assets/${project.imageName}`, bytes = await readFile(join(workspace, project.imagePath));
     if (files.has(target) && !files.get(target).equals(bytes)) throw new Error(`存在不同内容的同名配图：${project.imageName}`);

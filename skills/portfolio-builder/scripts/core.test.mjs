@@ -37,6 +37,8 @@ test('generation reuses unchanged README, persists edits, and preserves last sit
     await generate(edit, [repo], {}, root, root, () => {}, fetcher);
     assert.equal(calls, 1);
     const oldHtml = await readFile(join(root, 'site/index.html'), 'utf8'); assert.ok(oldHtml.includes('My name'));
+    assert.match(oldHtml, /<link rel="icon"[^>]+href="favicon\.svg"/);
+    assert.deepEqual(await readFile(join(root, 'site/favicon.svg')), await readFile(new URL('../assets/favicon.svg', import.meta.url)));
     await assert.rejects(generate(config, [{ ...repo, pushed_at: 'new-time' }], {}, root, root, () => {}, async () => { throw new Error('network unavailable'); }));
     assert.equal(await readFile(join(root, 'site/index.html'), 'utf8'), oldHtml);
   } finally { await rm(root, { recursive: true, force: true }); }

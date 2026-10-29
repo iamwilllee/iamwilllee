@@ -43,6 +43,8 @@ test('migration retains independent selections and emits legacy-compatible Profi
   const html=await readFile(join(stateRoot(root),'site/index.html'),'utf8');
   assert.ok(!html.includes('https://github.com/owner/xiaohuayu'));
   assert.ok(html.includes('已确认的公开介绍'));
+  assert.match(html, /<link rel="icon"[^>]+href="favicon\.svg"/);
+  assert.deepEqual(await readFile(join(stateRoot(root),'site/favicon.svg')),await readFile(new URL('../../portfolio-builder/assets/favicon.svg',import.meta.url)));
  }finally{await rm(root,{recursive:true,force:true});}
 });
 

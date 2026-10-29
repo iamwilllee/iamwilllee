@@ -121,7 +121,7 @@ export async function generateOutput(state,root,target){
   if(target==='site'){
    const html=renderSite({profile:state.profile},projects);
    await writeFile(join(staging,'index.html'),html);
-   for(const file of ['site.css','site.js'])await copyFile(new URL(`../../portfolio-builder/assets/${file}`,import.meta.url),join(staging,file));
+   for(const file of ['site.css','site.js','favicon.svg'])await copyFile(new URL(`../../portfolio-builder/assets/${file}`,import.meta.url),join(staging,file));
   }else{
    if(projects.some(p=>!p.url))throw Error('Profile 展示项目需要公开产品入口，或可公开访问的源码链接。请先补充项目入口。');
    const e=escapeHtml,profile=state.profile;

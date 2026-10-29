@@ -33,6 +33,14 @@ test('发布检查验证 HTML、共享样式与配图字节，阻止旧图或旧
     await writeFile(join(root,'assets/project-covers/demo.png'),'image-content');
     await sync({workspace:root});
     await sync({workspace:root,check:true});
+    assert.match(await readFile(join(root,'portfolio/index.html'),'utf8'), /<link rel="icon"[^>]+href="favicon\.svg"/);
+    assert.deepEqual(await readFile(join(root,'portfolio/favicon.svg')),await readFile(new URL('../skills/portfolio-builder/assets/favicon.svg',import.meta.url)));
+    await rm(join(root,'portfolio/favicon.svg'));
+    await assert.rejects(sync({workspace:root,check:true}),/favicon.svg/);
+    await sync({workspace:root});
+    await writeFile(join(root,'portfolio/favicon.svg'),'outdated-icon');
+    await assert.rejects(sync({workspace:root,check:true}),/favicon.svg/);
+    await sync({workspace:root});
     await writeFile(join(root,'portfolio/assets/demo.png'),'old-image');
     await assert.rejects(sync({workspace:root,check:true}),/demo.png/);
     await sync({workspace:root});
