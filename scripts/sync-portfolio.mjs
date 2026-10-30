@@ -36,7 +36,14 @@ export function parseProjects(markdown) {
       throw new Error(`项目图片必须位于根目录 assets/：${image[1]}`);
     }
 
+    // Keep an explicitly selected website cover separate from the Profile image.
+    const siteImagePath = cell.match(/<img\b[^>]*\bdata-site-cover="([^"]+)"/i)?.[1];
+    if (siteImagePath && (!siteImagePath.startsWith('assets/') || siteImagePath.split('/').includes('..') || siteImagePath.includes('\\'))) {
+      throw new Error(`站点配图必须位于根目录 assets/：${siteImagePath}`);
+    }
+
     return {
+      ...(siteImagePath ? { siteImagePath } : {}),
       href: normalizeUrl(href),
       imagePath: image[1],
       imageName: basename(image[1]),
@@ -65,7 +72,7 @@ export function renderPortfolio(markdown) {
   const profile = parseProfile(markdown);
   const projects = parseProjects(markdown).map(p => ({
     name: p.name, description: p.description, platform: p.tech,
-    url: p.href, image: p.imageName, imageSource: /AI/.test(p.alt) ? 'AI 概念配图' : undefined,
+    url: p.href, image: basename(p.siteImagePath || p.imagePath), imageSource: /AI/.test(p.alt) ? 'AI 概念配图' : undefined,
     private: true,
   }));
   return renderSite({ profile }, projects);
@@ -77,7 +84,8 @@ export async function sync({ workspace = repositoryRoot, check = checkOnly } = {
   const files = new Map([['index.html', Buffer.from(renderPortfolio(markdown))]]);
   for (const file of ['site.css', 'site.js', 'favicon.svg']) files.set(file, await readFile(new URL(`../skills/portfolio-builder/assets/${file}`, import.meta.url)));
   for (const project of projects) {
-    const target = `assets/${project.imageName}`, bytes = await readFile(join(workspace, project.imagePath));
+    const imagePath = project.siteImagePath || project.imagePath;
+    const target = `assets/${basename(imagePath)}`, bytes = await readFile(join(workspace, imagePath));
     if (files.has(target) && !files.get(target).equals(bytes)) throw new Error(`存在不同内容的同名配图：${project.imageName}`);
     files.set(target, bytes);
   }

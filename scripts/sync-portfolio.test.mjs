@@ -53,3 +53,25 @@ test('发布检查验证 HTML、共享样式与配图字节，阻止旧图或旧
     assert.match(await readFile(join(root,'portfolio/index.html'),'utf8'),/更新后的描述/);
   } finally {await rm(root,{recursive:true,force:true});}
 });
+
+
+test('显式站点封面独立发布，Profile 原图不被替换，缺图或旧图阻止发布', async () => {
+  const root=await mkdtemp(join(tmpdir(),'portfolio-cover-selection-'));
+  try {
+    const markdown=fixture.replace('<img src=', '<img data-site-cover="assets/project-covers/site.png" src=');
+    assert.equal(parseProjects(markdown)[0].imagePath,'assets/project-covers/demo.png');
+    assert.equal(parseProjects(markdown)[0].siteImagePath,'assets/project-covers/site.png');
+    assert.match(renderPortfolio(markdown),/src="assets\/site\.png"/);
+    assert.throws(()=>parseProjects(markdown.replace('assets/project-covers/site.png','assets/../private.png')),/站点配图/);
+    await mkdir(join(root,'assets/project-covers'),{recursive:true});
+    await writeFile(join(root,'README.md'),markdown);
+    await writeFile(join(root,'assets/project-covers/demo.png'),'profile-image');
+    await assert.rejects(sync({workspace:root}),/site.png/);
+    await writeFile(join(root,'assets/project-covers/site.png'),'site-image');
+    await sync({workspace:root});
+    assert.equal(await readFile(join(root,'portfolio/assets/site.png'),'utf8'),'site-image');
+    assert.equal(await readFile(join(root,'assets/project-covers/demo.png'),'utf8'),'profile-image');
+    await writeFile(join(root,'portfolio/assets/site.png'),'profile-image');
+    await assert.rejects(sync({workspace:root,check:true}),/site.png/);
+  } finally {await rm(root,{recursive:true,force:true});}
+});

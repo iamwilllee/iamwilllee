@@ -71,7 +71,43 @@
       "width": 1672,
       "height": 941,
       "sourceType": "AI 概念配图"
+    },
+    {
+      "repo": "iamwilllee/perch",
+      "file": "perch.png",
+      "theme": "轻盈栖栏：海军蓝、薄荷色与磨砂玻璃",
+      "prompt": "Use case: stylized-concept. Asset type: conceptual README cover for 栖栏 Perch, a private native macOS top-of-screen app shelf. Landscape 16:9, approximately 1600x900 pixels. Full-bleed artwork to all four edges, no margins, borders, empty padding, letterboxing or watermark. Conceptual README cover, not a product screenshot. No text, letters, numbers, code, invented logos, application windows or fabricated UI. Clear focal subject readable at card size, polished composition and tactile materials. A precise serene sculptural arrangement of a slender floating horizontal shelf near the upper part of the scene, supporting a small orderly set of softly rounded translucent mint and pale ceramic blocks. Large calm open space below is a softly lit navy atmosphere with subtle architectural depth, not a blank image border. A few thin glass planes suggest full-window previews without any actual interface or markings. Brushed aluminum, softly frosted glass, deep slate navy #0B1724 and #294557, luminous mint #87E6C4 and cool off-white #EBF5F2. Native macOS restraint, lightness, calm organization, premium product editorial 3D still life. Diffused cool daylight, disciplined geometry, subtle shadows. Do not make a wood desk, bookshelf, bird mascot, Apple logo or generic neon cyberpunk scene.",
+      "width": 1672,
+      "height": 941,
+      "sourceType": "AI 概念配图"
+    },
+    {
+      "repo": "iamwilllee/cluefolio",
+      "file": "cluefolio.png",
+      "theme": "朱砂档案：纸白、墨黑与少量来源连线",
+      "prompt": "Use case: stylized-concept. Asset type: conceptual README cover for Cluefolio 迹册, a product research archive connecting snapshots, changes and dated source evidence. Landscape 16:9, approximately 1600x900 pixels. Full-bleed artwork to all four edges, no margins, borders, empty padding, letterboxing or watermark. Conceptual README cover, not a product screenshot. No text, letters, numbers, code, invented logos, application windows or fabricated UI. Clear focal subject readable at card size, polished composition and tactile materials. Premium archival editorial composition: several staggered ivory and translucent vellum folios arranged as three successive observations across a dark neutral tabletop. Fine cinnabar threads and small precise red pins connect purposeful details between the overlapping folios; slight raised transparent lenses suggest examining changes and their provenance. Abstract empty thumbnail apertures and fine paper texture, no charts with data or writing. Calm intellectual study atmosphere, black and paper-white Catalog identity with very restrained cinnabar #b8543c accents, soft directional daylight, elegant shadows, architectural precision and an archival material sense. Not a ranking board, storefront, detective crime board, generic circuit diagram, wooden desk scene or fake app screenshot.",
+      "width": 1672,
+      "height": 941,
+      "sourceType": "AI 概念配图"
+    },
+    {
+      "repo": "iamwilllee/lefio",
+      "file": "lefio.png",
+      "theme": "纸上留页：纸白、暖朱红与真实印刷质感",
+      "prompt": "Use case: photorealistic-natural. Asset type: conceptual README cover for 留页 Lefio, a browser-local photo book maker. Landscape 16:9, approximately 1600x900 pixels. Full-bleed artwork to all four edges, no margins, borders, empty padding, letterboxing or watermark. Conceptual README cover, not a product screenshot. No text, letters, numbers, code, invented logos, application windows or fabricated UI. Clear focal subject readable at card size, polished composition and tactile materials. A beautifully crafted open square photo book on warm ivory linen, a few loose unlettered photographic prints of sea cliffs, soft woodland light and ordinary small details arranged into purposeful book spreads. One gently lifted page and a restrained terracotta cloth spine express turning photos into a lasting book. Close natural editorial still-life photography with real paper grain, matte printing, gentle page shadows, warm daylight and a quiet generous composition filling the frame. Palette paper-white #fff8ef, warm vermilion #b8543c, charcoal ink #302e2a, muted natural image colors. No people, faces, personal photographs, scrapbook stickers, generated software UI or new brand symbol. This is a newly imagined concept scene, not an actual Lefio printed sample or a transformation of user photos.",
+      "width": 1672,
+      "height": 941,
+      "sourceType": "AI 概念配图"
+    },
+    {
+      "repo": "iamwilllee/realcut",
+      "file": "realcut.png",
+      "theme": "造型编辑室：黑白、银色与中性石材",
+      "prompt": "Use case: photorealistic-natural. Asset type: conceptual README cover for RealCut, a hairstyle and portrait inspiration catalog with an optional external creative Skill. Landscape 16:9, approximately 1600x900 pixels. Full-bleed artwork to all four edges, no margins, borders, empty padding, letterboxing or watermark. Conceptual README cover, not a product screenshot. No text, letters, numbers, code, invented logos, application windows or fabricated UI. Clear focal subject readable at card size, polished composition and tactile materials. A sophisticated monochrome styling-editorial material study: beautifully polished silver hair scissors and a dark comb arranged alongside a few graceful sculptural ribbons of dark hair-like fiber and neutral unlettered matte swatch cards, on warm gray stone with a soft reflected studio light. Express collecting and interpreting personal style, not medical treatment or a haircut before-and-after. Black, charcoal, ivory and silver, crisp tactile surfaces, controlled dramatic yet soft lighting, contemporary fashion magazine still-life, close composition with material elements extending toward edges. No people, human faces, new portraits, models, wigs on mannequin heads, medical symbols, generated product UI or brand logos. Do not alter or regenerate any existing RealCut portrait or hairstyle reference. This is a separate conceptual README asset.",
+      "width": 1672,
+      "height": 941,
+      "sourceType": "AI 概念配图"
     }
   ],
-  "updatedAt": "2026-10-28"
+  "updatedAt": "2026-10-31"
 }
