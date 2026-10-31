@@ -11,6 +11,16 @@ description: 打开并操作 GitHub 作品集手动工作台，承接页面选�
 
 首次启动导入 workspace 内已有的 portfolio-builder 配置、项目图文稿和已确认展示资料，保留 Profile 与站点的独立选择。数据与私有项目草稿应被 Git 忽略。
 
+## 手动同步与优化范围
+
+用户说“同步我的项目”时，运行 `scripts/cli.mjs sync --workspace <实际目录>`，刷新 GitHub 仓库元数据并列出待核对项目；`plan` 只查看已缓存的清单。按清单的 `checkedAt` 说明检查时间，`pushed_at` 变化只是核对线索，仍需读取源码判断 README 是否需要更新。没有变化时不重做配图。
+
+核对默认分支实际提交与相关差异后，可用 `record-check --workspace <实际目录> --repo <仓库> --source-sha <完整 SHA> --pushed-at <本次仓库更新时间> --summary <检查结论>` 保存检查基线；确认需更新文档时加 `--needs-update`。这不会修改原分析快照、README 或已确认展示资料，原有设计任务仍保留。只要求检查时报告结论，不自动执行设计或发布。
+
+每个项目的 `optimizationEnabled` 独立控制 README 优化，旧记录缺失时沿用启用状态；新发现仓库默认暂停。暂停项目仍在仓库清单中，可继续展示已确认内容，但不创建或回写优化任务，也不纳入批量优化。暂停会取消该项目已有的待执行任务；恢复后需重新准备任务。不要自行替用户选择停用项目。
+
+参与优化、Profile 展示、站点展示分别配置。手动同步本身不会写回任何 GitHub README 或发布站点，采用和发布按用户本次要求继续执行。
+
 ## 优化工作台选中的项目
 
 读取已保存任务：
@@ -33,6 +43,8 @@ node <本 Skill>/scripts/cli.mjs import --workspace <实际目录> --repo <任�
 
 ## Profile 与站点
 
-读取用户在页面保存的选择，用 `cli.mjs generate-profile` 或 `generate-site`（均需 `--workspace`）生成本地结果。页面也提供相同生成按钮。生成只使用已确认展示资料与允许公开的封面，私有仓库不输出源码链接；Profile 与站点可以选择不同作品。
+读取用户在页面保存的选择，用 `cli.mjs generate-profile` 或 `generate-site`（均需 `--workspace`）生成本地结果。页面也提供相同生成按钮。生成只使用已确认展示资料与允许公开的封面，私有仓库不输出源码链接；Profile 与站点可以选择不同作品。Profile 的 `profileLayout` 单独配置最多四个精选（双列配图）、其他作品的分类和短介绍；没有版式配置时默认精选四个。普通作品只生成分类文字链接，个人站点入口使用 `profile.website`。不要将所有项目重新排成长列大图。
+
+生成站点同时输出公开的 `site/portfolio-data.json`。正式站点以根 `portfolio-data.json` 为来源，清单只含已确认的公开个人资料、项目文案、入口与素材路径；没有清单的旧仓库兼容原 README 表格。发布时把清单和引用的素材一起整理，再运行 `pnpm sync:portfolio` 与 `pnpm check:portfolio`。不要从精简 Profile 的四张卡片推导完整网站清单。
 
 本地采用、生成、提交、推送和部署是不同状态。仅在用户授权的范围内提交或发布；工作台“采用当前稿”只保存本地确认。保持现有项目源文件与其他仓库不变。

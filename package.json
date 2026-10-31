@@ -10,7 +10,7 @@
     "check:readme": "node --check skills/readme-designer/scripts/preview.mjs && node --check skills/readme-designer/scripts/validate.mjs && node --check skills/readme-designer/references/preview.js && node skills/readme-designer/scripts/validate.mjs experiments/runo-readme/README.md",
     "portfolio:builder": "pnpm portfolio:workbench",
     "portfolio:workbench": "node skills/github-portfolio/scripts/server.mjs --workspace .",
-    "check:workbench": "node --check skills/github-portfolio/scripts/workbench.mjs && node --check skills/github-portfolio/scripts/server.mjs && node --check skills/github-portfolio/scripts/cli.mjs && node --check skills/github-portfolio/assets/app.js && node --check skills/github-portfolio/assets/frame.js",
+    "check:workbench": "node --check skills/github-portfolio/scripts/workbench.mjs && node --check skills/github-portfolio/scripts/profile.mjs && node --check skills/github-portfolio/scripts/server.mjs && node --check skills/github-portfolio/scripts/cli.mjs && node --check skills/github-portfolio/assets/app.js && node --check skills/github-portfolio/assets/frame.js",
     "check:builder": "node --check skills/portfolio-builder/scripts/server.mjs && node --check skills/portfolio-builder/scripts/core.mjs && node --check skills/portfolio-builder/assets/app.js && node --check skills/portfolio-builder/assets/site.js",
     "sync:portfolio": "node scripts/sync-portfolio.mjs",
     "check:portfolio": "node scripts/sync-portfolio.mjs --check",

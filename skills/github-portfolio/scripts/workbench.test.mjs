@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, cp, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { initialize, act, readState, stateRoot, importDraft, importSiteCovers, clientState } from './workbench.mjs';
-import { parseProjects } from '../../../scripts/sync-portfolio.mjs';
+import { initialize, act, readState, stateRoot, importDraft, importSiteCovers, clientState, refreshInventory, syncPlan } from './workbench.mjs';
+import { validatePublication } from '../../../scripts/sync-portfolio.mjs';
+import { profileLayout, renderProfile } from './profile.mjs';
 
 const image='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="#315944"/></svg>';
 async function fixture(){
@@ -31,14 +32,14 @@ async function fixture(){
 }
 const input=p=>({name:p.name,description:p.description,platform:p.platform,url:p.url,...p.design});
 
-test('migration retains independent selections and emits legacy-compatible Profile cards using confirmed data',async()=>{
+test('migration retains independent selections and emits compact Profile cards using confirmed data',async()=>{
  const {root,state}=await fixture();
  try{
   assert.deepEqual(state.profileRepos,['owner/xiaohuayu']);assert.equal(state.siteRepos.length,2);
   const p=state.projects[0];assert.equal(p.approved.description,'已确认的公开介绍');
   const next=await act(root,{type:'generate-profile',revision:state.revision});
   const markdown=await readFile(join(stateRoot(root),'profile/README.md'),'utf8');
-  assert.equal(parseProjects(markdown).length,1);assert.ok(!markdown.includes('INTERNAL_SOURCE_ONLY'));
+  assert.equal((markdown.match(/<img /g)||[]).length,1);assert.match(markdown, /width="360"/);assert.ok(!markdown.includes('INTERNAL_SOURCE_ONLY'));
   await act(root,{type:'generate-site',revision:next.revision});
   const html=await readFile(join(stateRoot(root),'site/index.html'),'utf8');
   assert.ok(!html.includes('https://github.com/owner/xiaohuayu'));
@@ -115,5 +116,111 @@ test('website covers update independently of locked README covers and survive ad
   png.writeUInt32BE(1200,16);await writeFile(join(root,'cover.png'),png);
   await assert.rejects(importSiteCovers(root,manifest),/16:9/);
   assert.deepEqual((await readState(root)).projects[1].siteCover,next.projects[1].siteCover);
+ }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('pausing optimization persists, cancels pending work and blocks new requests and late draft imports without hiding published work',async()=>{
+ const {root,state}=await fixture();
+ try{
+  const p=state.projects[1];
+  assert.equal(clientState(state).projects[1].optimizationEnabled,true);
+  let next=await act(root,{type:'generate-site',revision:state.revision});
+  const html=await readFile(join(stateRoot(root),'site/index.html'),'utf8');
+  next=await act(root,{type:'request',repo:p.repo,project:input(p),revision:next.revision});
+  const request=next.requests[0];
+  assert.ok(syncPlan(next).candidates.some(c=>c.repo===p.repo));
+  next=await act(root,{type:'optimization',repo:p.repo,enabled:false,revision:next.revision});
+  assert.equal((await readState(root)).projects[1].optimizationEnabled,false);
+  assert.equal(next.requests[0].status,'cancelled');assert.equal(next.activeRequestId,null);
+  assert.deepEqual(next.profileRepos,state.profileRepos);assert.deepEqual(next.siteRepos,state.siteRepos);
+  assert.deepEqual(next.projects[1].approved,p.approved);assert.deepEqual(next.projects[1].draft,p.draft);
+  assert.equal(clientState(next).results.site.stale,false);
+  assert.equal(await readFile(join(stateRoot(root),'site/index.html'),'utf8'),html);
+  assert.ok(!syncPlan(next).candidates.some(c=>c.repo===p.repo));
+  await assert.rejects(act(root,{type:'request',repo:p.repo,project:input(p),revision:next.revision}),/暂停/);
+  await assert.rejects(importDraft(root,{repo:p.repo,requestId:request.id,folder:root}),/暂停/);
+  next=await act(root,{type:'optimization',repo:p.repo,enabled:true,revision:next.revision});
+  assert.equal(next.requests[0].status,'cancelled');
+  next=await act(root,{type:'request',repo:p.repo,project:input(p),revision:next.revision});
+  assert.equal(next.requests[0].status,'pending');assert.notEqual(next.requests[0].id,request.id);
+ }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('manual inventory refresh retains exclusions and source-change hints; newly discovered repositories require opt-in',async()=>{
+ const {root,state}=await fixture();
+ try{
+  const p=state.projects[1];
+  let next=await act(root,{type:'optimization',repo:p.repo,enabled:false,revision:state.revision});
+  const changed=state.projects.map(p=>({...p.repository,pushed_at:'2026-02-01'}));
+  const fresh={id:3,name:'new-app',full_name:'owner/new-app',private:true,html_url:'https://github.com/owner/new-app',pushed_at:'2026-02-01'};
+  next=await refreshInventory(root,[...changed,fresh]);
+  assert.equal(next.projects[1].optimizationEnabled,false);assert.equal(next.projects[1].sourceChanged,true);
+  assert.equal(next.projects[2].optimizationEnabled,false);
+  assert.deepEqual(next.siteRepos,state.siteRepos);assert.deepEqual(next.profileRepos,state.profileRepos);
+  const plan=syncPlan(next);
+  assert.deepEqual(plan.candidates.map(p=>p.repo),['owner/xiaohuayu']);
+  assert.deepEqual(plan.paused.map(p=>p.repo),['owner/runo','owner/new-app']);
+  assert.equal(plan.checkedAt,next.fetchedAt);
+  next=await act(root,{type:'optimization',repo:fresh.full_name,enabled:true,revision:next.revision});
+  assert.ok(syncPlan(next).candidates.some(p=>p.repo===fresh.full_name&&p.reason==='尚未分析'));
+ }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('a verified update check clears old hints without changing the analysis snapshot, and future pushes are detected',async()=>{
+ const {root,state}=await fixture();
+ try{
+  const p=state.projects[1],sha='a'.repeat(40),changed=state.projects.map(p=>({...p.repository,pushed_at:'2026-02-01'}));
+  let next=await refreshInventory(root,changed);
+  next=await act(root,{type:'record-check',repo:p.repo,sourceSha:sha,pushedAt:'2026-02-01',needsUpdate:false,summary:'提交已核对，无需重写。',revision:next.revision});
+  assert.equal(next.projects[1].sourceSha,p.sourceSha);assert.deepEqual(next.projects[1].approved,p.approved);assert.deepEqual(next.projects[1].draft,p.draft);
+  assert.equal(next.projects[1].lastUpdateCheck.sourceSha,sha);assert.equal(next.projects[1].sourceChanged,false);
+  next=await refreshInventory(root,changed);
+  assert.equal(next.projects[1].sourceChanged,false);assert.ok(!syncPlan(next).candidates.some(c=>c.repo===p.repo));
+  next=await refreshInventory(root,changed.map(r=>({...r,pushed_at:'2026-03-01'})));
+  assert.equal(next.projects[1].sourceChanged,true);
+  await assert.rejects(act(root,{type:'record-check',repo:p.repo,sourceSha:sha,pushedAt:'2026-02-01',needsUpdate:false}),/资料已变化/);
+  next=await act(root,{type:'optimization',repo:p.repo,enabled:false,revision:next.revision});
+  await assert.rejects(act(root,{type:'record-check',repo:p.repo,sourceSha:sha,pushedAt:'2026-03-01',needsUpdate:false}),/暂停/);
+ }finally{await rm(root,{recursive:true,force:true});}
+});
+
+
+test('Profile uses at most four featured images and keeps every other project as a native grouped link',()=>{
+ const projects=Array.from({length:12},(_,i)=>({repo:`owner/${i}`,name:`Project ${i}`,description:'Approved description',platform:'Web',url:`https://example.com/${i}`,image:`assets/${i}.png`}));
+ const layout={featuredRepos:projects.slice(0,4).map(p=>p.repo),entries:Object.fromEntries(projects.map((p,i)=>[p.repo,{group:i<8?'研究与创作':'亲子与家庭',summary:'简短介绍'}]))};
+ const markdown=renderProfile({name:'Maker',headline:'Build things.',bio:'A maker.',github:'https://github.com/owner',website:'https://example.com/'},projects,layout);
+ assert.equal((markdown.match(/<img /g)||[]).length,4);
+ assert.equal((markdown.match(/<tr>/g)||[]).length,2);
+ assert.equal((markdown.match(/<td width="50%"/g)||[]).length,4);
+ for(const p of projects)assert.ok(markdown.includes(p.url));
+ assert.match(markdown, /研究与创作/);assert.match(markdown, /亲子与家庭/);assert.match(markdown,/个人站点/);
+ assert.doesNotMatch(markdown, /style=|class=|<script|<iframe|width="840"/);
+ assert.throws(()=>profileLayout(projects.map(p=>p.repo),{featuredRepos:projects.slice(0,5).map(p=>p.repo)}),/最多精选/);
+ assert.throws(()=>profileLayout(['owner/1'],{featuredRepos:['owner/2']}),/最多精选/);
+ assert.throws(()=>profileLayout(['owner/1'],{featuredRepos:[],entries:{'owner/1':{group:'bad\nheading'}}}),/格式/);
+});
+
+test('Profile presentation persists without changing website selection, descriptions, covers or freshness',async()=>{
+ const {root,state}=await fixture();
+ try{
+  let next=await act(root,{type:'adopt',revision:state.revision,repo:state.projects[1].repo,project:{...input(state.projects[1]),description:'Approved Runo introduction'}});
+  next=await act(root,{type:'config',revision:next.revision,profile:next.profile,profileRepos:next.siteRepos,siteRepos:next.siteRepos});
+  next=await act(root,{type:'generate-site',revision:next.revision});
+  next=await act(root,{type:'generate-profile',revision:next.revision});
+  const before=await readFile(join(stateRoot(root),'site/index.html'),'utf8');
+  const repo=next.profileRepos[0],ordinary=next.profileRepos[1];
+  const layout={featuredRepos:[repo],entries:{[repo]:{summary:'A tiny introduction'},[ordinary]:{group:'日常工具'}}};
+  next=await act(root,{type:'config',revision:next.revision,profile:{...next.profile,website:'https://example.com/'},profileRepos:next.profileRepos,siteRepos:next.siteRepos,profileLayout:layout});
+  assert.equal(clientState(next).results.profile.stale,true);assert.equal(clientState(next).results.site.stale,false);
+  assert.deepEqual((await readState(root)).profileLayout,next.profileLayout);
+  // An ordinary text entry needs no image to generate a Profile.
+  await rm(join(stateRoot(root),next.projects[1].approved.cover));
+  next=await act(root,{type:'generate-profile',revision:next.revision});
+  const markdown=await readFile(join(stateRoot(root),'profile/README.md'),'utf8');
+  assert.equal((markdown.match(/<img /g)||[]).length,1);assert.match(markdown,/A tiny introduction/);assert.match(markdown,/日常工具/);
+  assert.equal(await readFile(join(stateRoot(root),'site/index.html'),'utf8'),before);
+  const data=validatePublication(JSON.parse(await readFile(join(stateRoot(root),'site/portfolio-data.json'),'utf8')));
+  assert.equal(data.projects.length,2);assert.equal(data.projects[0].description,'已确认的公开介绍');
+  assert.doesNotMatch(JSON.stringify(data),/INTERNAL_SOURCE_ONLY|sourceSha|draftHash|github.com\/owner\/(?:runo|xiaohuayu)/);
  }finally{await rm(root,{recursive:true,force:true});}
 });

@@ -1,7 +1,9 @@
 import { readFile, writeFile, mkdir, cp, copyFile, rename, rm, access, realpath } from 'node:fs/promises';
 import { resolve, join, dirname, extname, sep } from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
-import { readJson, saveJson, existingProjects, safeUrl, renderSite, escapeHtml } from '../../portfolio-builder/scripts/core.mjs';
+import { readJson, saveJson, existingProjects, safeUrl, renderSite } from '../../portfolio-builder/scripts/core.mjs';
+
+import { profileLayout, renderProfile } from './profile.mjs';
 
 export const stateRoot = workspace => resolve(workspace, '.portfolio-workbench');
 export const digest = value => createHash('sha256').update(typeof value === 'string' ? value : JSON.stringify(value)).digest('hex');
@@ -11,6 +13,19 @@ const themes = { runo:'北欧工作台，保留现有品牌绿与已确认封面
 const firstParagraph = md => md.split(/\n\s*\n/).map(s => s.trim()).find(s => s && !/^(?:#|<|>|!|\*\*|\[|\|)/.test(s)) || '';
 const projectFor = (state, repo) => { const p=state.projects.find(p=>p.repo===repo); if(!p) throw Error('项目不存在，请刷新仓库。'); return p; };
 const imagePath = md => md.match(/<img\b[^>]*src="([^"]+)"/i)?.[1] || md.match(/!\[[^\]]*\]\(([^)]+)\)/)?.[1];
+export const optimizationEnabled = project => project.optimizationEnabled !== false;
+function requireOptimization(project){if(!optimizationEnabled(project))throw Error('此项目已暂停 README 优化，请先在工作台恢复。');}
+export function syncPlan(state){
+ const candidates=[],paused=[],unchanged=[];
+ for(const p of state.projects){
+  const item={repo:p.repo,name:p.name};
+  if(!optimizationEnabled(p)){paused.push(item);continue;}
+  const pending=state.requests.some(r=>r.repo===p.repo&&r.status==='pending');
+  const reason=!p.sourceSha?'尚未分析':p.sourceChanged?'远端有更新，需核对源码':pending?'已有待执行的优化要求':null;
+  if(reason)candidates.push({...item,reason});else unchanged.push(item);
+ }
+ return {checkedAt:state.fetchedAt,candidates,paused,unchanged};
+}
 
 export async function safeFile(root, relative) {
  const target=resolve(root,relative);
@@ -45,6 +60,7 @@ export async function initialize(workspace) {
   const name=previous?.name||legacy?.name||entry?.title||repo.name;
   const description=previous?.description||legacy?.description||firstParagraph(markdown)||repo.description||'';
   const p={id,repo:repo.full_name,repository:repo,name,description,platform:previous?.platform||legacy?.platform||entry?.tag||repo.language||'',url:website,category:entry?.category||'其他项目',sourceSha:entry?.sourceCommit||null,sourcePushedAt:repo.pushed_at||null,sourceChanged:false,draft:{root:relative,hash:digest(markdown),cover,importedAt:new Date().toISOString(),theme:entry?.status==='published'?'北欧工作台':entry?'北欧初稿':'未设计',published:entry?.status==='published'},design:{direction:themes[repo.name]||'按项目定位定制主题',keepCover:entry?.status==='published',keepCopy:true,notes:''},approved:null};
+  p.optimizationEnabled=!!(entry||legacy||previous);
   if(legacy||entry?.status==='published'){
    const publicRoot=`projects/${id}/approved/initial`;await mkdir(join(root,publicRoot),{recursive:true});
    let publicCover=null;
@@ -82,8 +98,10 @@ function updateProject(p,input){
 }
 function validateSelection(state,input){
  const list=(values)=>{if(!Array.isArray(values)||values.length>state.projects.length)throw Error('展示选择格式不正确。');if(new Set(values).size!==values.length)throw Error('展示项目重复。');for(const repo of values)projectFor(state,repo);return values;};
- const profile={name:text(input.profile.name,80),headline:text(input.profile.headline,180),bio:text(input.profile.bio,600),github:safeUrl(input.profile.github)};
- if(!profile.name)throw Error('请填写展示名称。');return {profile,profileRepos:list(input.profileRepos),siteRepos:list(input.siteRepos)};
+ const profile={name:text(input.profile.name,80),headline:text(input.profile.headline,180),bio:text(input.profile.bio,600),github:safeUrl(input.profile.github),website:safeUrl(input.profile.website||'')};
+ if(!profile.name)throw Error('请填写展示名称。');const profileRepos=list(input.profileRepos);
+ const previous=state.profileLayout?{...state.profileLayout,featuredRepos:state.profileLayout.featuredRepos.filter(repo=>profileRepos.includes(repo))}:undefined;
+ return {profile,profileRepos,siteRepos:list(input.siteRepos),profileLayout:profileLayout(profileRepos,input.profileLayout??previous)};
 }
 async function adopt(p,root){
  const acceptedRoot=`projects/${p.id}/approved/${p.draft.hash.slice(0,16)}`;
@@ -104,7 +122,7 @@ function publicProjects(state,target){
  });
 }
 export function outputSignature(state,target){
- try{return digest({profile:state.profile,projects:publicProjects(state,target)});}catch{return null;}
+ try{const {website,...sharedProfile}=state.profile;return digest({profile:target==='site'?sharedProfile:state.profile,projects:publicProjects(state,target),...(target==='profile'?{layout:profileLayout(state.profileRepos,state.profileLayout)}:{})});}catch{return null;}
 }
 async function swapDirectory(staging,target){
  const backup=`${target}.previous`;
@@ -117,16 +135,18 @@ export async function generateOutput(state,root,target){
  const projects=publicProjects(state,target),staging=join(root,`.${target}-${randomUUID()}`);
  await mkdir(join(staging,'assets'),{recursive:true});
  try{
-  for(const p of projects)if(p.cover){p.image=`${p.id}${extname(p.cover)}`;await copyFile(await safeFile(root,p.cover),join(staging,'assets',p.image));}
+  for(const p of projects)if(p.cover&&(target==='site'||profileLayout(state.profileRepos,state.profileLayout).featuredRepos.includes(p.repo))){p.image=`${p.id}${extname(p.cover)}`;await copyFile(await safeFile(root,p.cover),join(staging,'assets',p.image));}
   if(target==='site'){
    const html=renderSite({profile:state.profile},projects);
    await writeFile(join(staging,'index.html'),html);
+   // A portable, public-only website source. Do not serialize repository records.
+   const data={schemaVersion:1,profile:{name:state.profile.name,headline:state.profile.headline,bio:state.profile.bio,github:state.profile.github},projects:projects.map(p=>({name:p.name,description:p.description,platform:p.platform,url:p.url,...(p.image?{imagePath:`assets/${p.image}`}:{ }),...(p.imageSource?{imageSource:p.imageSource}:{ })}))};
+   await writeFile(join(staging,'portfolio-data.json'),JSON.stringify(data,null,2)+'\n');
    for(const file of ['site.css','site.js','favicon.svg'])await copyFile(new URL(`../../portfolio-builder/assets/${file}`,import.meta.url),join(staging,file));
   }else{
    if(projects.some(p=>!p.url))throw Error('Profile 展示项目需要公开产品入口，或可公开访问的源码链接。请先补充项目入口。');
-   const e=escapeHtml,profile=state.profile;
-   const cards=projects.map(p=>`<tr><td width="100%">\n<a href="${e(p.url)}">${p.image?`<img src="assets/${e(p.image)}" alt="${e(p.name)}" width="840">`:e(p.name)}</a>\n<p><b>${e(p.name)}</b> · ${e(p.description)}</p>\n<p>${e(p.platform||'独立作品')}</p>\n</td></tr>`).join('\n');
-   const markdown=`# ${e(profile.name)}\n\n**${e(profile.headline)}**\n\n${e(profile.bio)}\n\n${profile.github?`[GitHub](${profile.github})\n\n`:''}## 我的作品\n\n<table>\n${cards}\n</table>\n`;
+   const layout=profileLayout(state.profileRepos,state.profileLayout);
+   const markdown=renderProfile(state.profile,projects.map(p=>({...p,image:p.image?`assets/${p.image}`:undefined})),layout);
    await writeFile(join(staging,'README.md'),markdown);
   }
   await swapDirectory(staging,join(root,target));
@@ -141,6 +161,24 @@ export async function act(workspace,input){
    await generateOutput(state,root,input.type==='generate-profile'?'profile':'site');return;
   }
   const p=projectFor(state,input.repo);
+  if(input.type==='record-check'){
+   requireOptimization(p);
+   if(!/^[a-f0-9]{40,64}$/.test(input.sourceSha||''))throw Error('请提供已核对的完整提交 SHA。');
+   if(!input.pushedAt||input.pushedAt!==p.repository.pushed_at)throw Error('仓库资料已变化，请重新检查后再记录。');
+   if(typeof input.needsUpdate!=='boolean')throw Error('请说明本次检查是否需要更新文档。');
+   p.lastUpdateCheck={sourceSha:input.sourceSha,pushedAt:input.pushedAt,needsUpdate:input.needsUpdate,summary:text(input.summary||'',2000),checkedAt:new Date().toISOString()};
+   p.sourceChanged=input.needsUpdate;return;
+  }
+  if(input.type==='optimization'){
+   if(typeof input.enabled!=='boolean')throw Error('优化开关需要布尔值。');
+   p.optimizationEnabled=input.enabled;
+   if(!input.enabled)for(const request of state.requests)if(request.repo===p.repo&&request.status==='pending'){
+    request.status='cancelled';request.cancelReason='optimization-paused';request.cancelledAt=new Date().toISOString();
+    if(state.activeRequestId===request.id)state.activeRequestId=null;
+   }
+   return;
+  }
+  if(input.type==='request')requireOptimization(p);
   if(['project','request','adopt'].includes(input.type))updateProject(p,input.project);
   if(input.type==='project')return;
   if(input.type==='adopt'){await adopt(p,root);return;}
@@ -159,10 +197,10 @@ export async function refreshInventory(workspace,repositories){
  return writeOperation(workspace,undefined,async(state,root)=>{
   for(const repo of repositories){
    let p=state.projects.find(p=>p.repo===repo.full_name);
-   if(p){p.sourceChanged=!!p.sourcePushedAt&&p.sourcePushedAt!==repo.pushed_at;p.repository=repo;continue;}
+   if(p){const baseline=p.lastUpdateCheck?.pushedAt||p.sourcePushedAt;p.sourceChanged=!!p.lastUpdateCheck?.needsUpdate||!!baseline&&baseline!==repo.pushed_at;p.repository=repo;continue;}
    const id=/^\d+$/.test(String(repo.id))?String(repo.id):digest(repo.full_name).slice(0,12),relative=`projects/${id}/draft`;await mkdir(join(root,relative),{recursive:true});
    const markdown=`# ${repo.name}\n\n${repo.description||'尚未分析，请在聊天中发起项目分析。'}\n`;await writeFile(join(root,relative,'README.md'),markdown);
-   p={id,repo:repo.full_name,repository:repo,name:repo.name,description:repo.description||'',platform:repo.language||'',url:safeUrl(repo.homepage),category:'新发现',sourceSha:null,sourcePushedAt:repo.pushed_at,sourceChanged:false,draft:{root:relative,hash:digest(markdown),cover:null,theme:'未设计',published:false},design:{direction:'按项目定位定制主题',keepCover:false,keepCopy:true,notes:''},approved:null};state.projects.push(p);
+   p={id,repo:repo.full_name,repository:repo,name:repo.name,description:repo.description||'',platform:repo.language||'',url:safeUrl(repo.homepage),category:'新发现',optimizationEnabled:false,sourceSha:null,sourcePushedAt:repo.pushed_at,sourceChanged:false,draft:{root:relative,hash:digest(markdown),cover:null,theme:'未设计',published:false},design:{direction:'按项目定位定制主题',keepCover:false,keepCopy:true,notes:''},approved:null};state.projects.push(p);
   }
   state.fetchedAt=new Date().toISOString();
  });
@@ -170,6 +208,7 @@ export async function refreshInventory(workspace,repositories){
 export async function importDraft(workspace,{repo,requestId,folder,sourceSha}){
  return writeOperation(workspace,undefined,async(state,root)=>{
   const p=projectFor(state,repo),request=state.requests.find(r=>r.id===requestId&&r.repo===repo);
+  requireOptimization(p);
   if(!request||request.status!=='pending')throw Error('优化任务不存在或已经结束。');
   if(request.baseDraftHash!==p.draft.hash)throw Error('当前 README 已有新版本，请重新准备优化任务。');
   const inputRoot=resolve(folder),markdown=await readFile(join(inputRoot,'README.md'),'utf8');
@@ -185,7 +224,7 @@ export async function importDraft(workspace,{repo,requestId,folder,sourceSha}){
   const hash=digest(markdown),relative=`projects/${p.id}/versions/${request.id}`;
   await cp(inputRoot,join(root,relative),{recursive:true});
   const cover=imagePath(markdown);p.draft={root:relative,hash,cover:cover&&!/^https?:/.test(cover)?`${relative}/${cover}`:null,theme:request.design.direction,importedAt:new Date().toISOString(),published:false};
-  p.sourceSha=sourceSha||p.sourceSha;p.sourcePushedAt=p.repository.pushed_at;p.sourceChanged=false;
+  p.sourceSha=sourceSha||p.sourceSha;p.sourcePushedAt=p.repository.pushed_at;p.sourceChanged=false;delete p.lastUpdateCheck;
   request.status='completed';request.completedAt=new Date().toISOString();request.resultHash=hash;
  });
 }
@@ -209,5 +248,5 @@ export async function importSiteCovers(workspace,manifestFile,{includeProfile=fa
  });
 }
 export function clientState(state){
- return {...state,results:Object.fromEntries(Object.entries(state.results).map(([target,result])=>[target,result?{...result,stale:result.signature!==outputSignature(state,target)}:null]))};
+ return {...state,projects:state.projects.map(p=>({...p,optimizationEnabled:optimizationEnabled(p)})),syncPlan:syncPlan(state),results:Object.fromEntries(Object.entries(state.results).map(([target,result])=>[target,result?{...result,stale:result.signature!==outputSignature(state,target)}:null]))};
 }

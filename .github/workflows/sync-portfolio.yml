@@ -1,12 +1,14 @@
-name: Sync Portfolio from README
+name: Sync Portfolio from public inventory
 
 on:
   push:
     branches: [main]
     paths:
       - README.md
+      - portfolio-data.json
       - assets/**
       - scripts/sync-portfolio.mjs
+      - skills/portfolio-builder/**
 
 permissions:
   contents: write
@@ -34,12 +36,12 @@ jobs:
           node scripts/sync-portfolio.mjs --check
       - name: Commit synchronized website
         run: |
-          if git diff --quiet -- portfolio/index.html portfolio/assets; then
+          if git diff --quiet -- portfolio/; then
             echo "Portfolio is already synchronized."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add portfolio/index.html portfolio/assets
-          git commit -m "sync portfolio from README"
+          git add portfolio/
+          git commit -m "sync portfolio from public inventory"
           git push

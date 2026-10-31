@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "profile": {
+    "name": "Will Lee",
+    "headline": "把想法，做成小产品。",
+    "bio": "从一个具体的问题开始，做成可以使用的东西。",
+    "github": "https://github.com/iamwilllee"
+  },
+  "projects": [
+    {
+      "name": "Aster",
+      "description": "面向 Agent 与独立开发者的开源 Web 产品底座，按需组合能力并增量开发。",
+      "platform": "Web · 开源底座 · Codex Skill",
+      "url": "https://aster.iamwilllee.com/",
+      "imagePath": "assets/project-covers/aster.png",
+      "imageSource": "AI 概念配图"
+    },
+    {
+      "name": "Makenue",
+      "description": "独立开发者的产品与服务店铺，支持发现作品、私有编辑及 Agent 预览确认。",
+      "platform": "Web · 创作者平台 · Agent 发布助手",
+      "url": "https://makenue.iamwilllee.com/",
+      "imagePath": "assets/project-covers/makenue.png",
+      "imageSource": "AI 概念配图"
+    },
+    {
+      "name": "栖栏 · Perch",
+      "description": "把常用应用收进 Mac 顶部图标栏，切换应用、预览窗口，为桌面留一点空白。",
+      "platform": "macOS 14+ · 原生菜单栏 · Apple Silicon",
+      "url": "https://perch.iamwilllee.com/",
+      "imagePath": "assets/project-covers/perch.png",
+      "imageSource": "AI 概念配图"
+    },
+    {
+      "name": "Runo",
+      "description": "一个 macOS 菜单栏项目启动器，也是一块放在 Codex 里的项目台。把项目的启动配置、画面和日志放在一起，让你从一个想法，更快回到正在做的事。",
+      "platform": "macOS · 项目启动器 · Codex 项目台",
+      "url": "https://runo.iamwilllee.com/",
+      "imagePath": "assets/project-covers/runo.png"
+    },
+    {
+      "name": "Cluefolio · 迹册",
+      "description": "把独立产品的起点、变化与来源证据收成档案，从观察快照到对照与私人研究。",
+      "platform": "Web · 产品研究 · 证据时间线",
+      "url": "https://cluefolio.iamwilllee.com/",
+      "imagePath": "assets/project-covers/cluefolio.png",
+      "imageSource": "AI 概念配图"
+    },
+    {
+      "name": "留页 · Lefio",
+      "description": "把散落的照片整理成可以翻阅、导出与带走的图册，原图和编辑书稿留在本机。",
+      "platform": "Web · 本地图册 · PDF 导出",
+      "url": "https://lefio.iamwilllee.com/",
+      "imagePath": "assets/project-covers/lefio.png",
+      "imageSource": "AI 概念配图"
+    },
+    {
+      "name": "小画屿",
+      "description": "2–5 岁儿童的互动故事绘本",
+      "platform": "微信小程序",
+      "url": "https://xiaohuayu.iamwilllee.com/",
+      "imagePath": "assets/project-covers/xiaohuayu.png",
+      "imageSource": "AI 概念配图"
+    },
+    {
+      "name": "跟读岛 TaleLoop",
+      "description": "看动画，听懂故事，开口说英语",
+      "platform": "Web",
+      "url": "https://taleloop.iamwilllee.com/",
+      "imagePath": "assets/project-covers/tale-loop.png",
+      "imageSource": "AI 概念配图"
+    },
+    {
+      "name": "小拾页",
+      "description": "给一家人的私密成长纪念册",
+      "platform": "微信小程序",
+      "url": "https://xiaoshiye.iamwilllee.com/",
+      "imagePath": "assets/project-covers/xiaoshiye.png",
+      "imageSource": "AI 概念配图"
+    },
+    {
+      "name": "灵感图鉴",
+      "description": "发现 / 收藏 / 投稿 AI 图片 Prompt",
+      "platform": "WEB · 微信小程序 · Chrome 插件",
+      "url": "https://inspire.iamwilllee.com/",
+      "imagePath": "assets/project-covers/inspire.png",
+      "imageSource": "AI 概念配图"
+    },
+    {
+      "name": "RealCut",
+      "description": "发现与收藏发型、人像写真灵感，查看拆解和参考指令，再交给理发师、摄影师或自己的 AI 会话。",
+      "platform": "Web · 发型与写真灵感 · Codex Skill",
+      "url": "https://realcut.iamwilllee.com/",
+      "imagePath": "assets/project-covers/realcut.png",
+      "imageSource": "AI 概念配图"
+    },
+    {
+      "name": "切切贴",
+      "description": "一张大图秒变整套贴纸",
+      "platform": "WEB 静态站 · 本地运行",
+      "url": "https://sticker.iamwilllee.com/",
+      "imagePath": "assets/project-covers/sticker-web.png",
+      "imageSource": "AI 概念配图"
+    }
+  ]
+}

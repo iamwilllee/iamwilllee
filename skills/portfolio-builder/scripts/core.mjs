@@ -1,7 +1,7 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { readFile, writeFile, mkdir, rename, copyFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { join, basename, extname } from 'node:path';
 
 const exec = promisify(execFile);
 export const escapeHtml = (s = '') => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -32,14 +32,16 @@ export async function fetchRepositories() {
 }
 export async function existingProjects(workspace) {
   try {
-    const { parseProjects } = await import(new URL(`file://${join(workspace, 'scripts/sync-portfolio.mjs')}`));
-    const rows = parseProjects(await readFile(join(workspace, 'README.md'), 'utf8'));
+    const { parseProjects, validatePublication } = await import(new URL(`file://${join(workspace, 'scripts/sync-portfolio.mjs')}`));
+    const inventory=await readJson(join(workspace,'portfolio-data.json'),null);
+    const rows=inventory?validatePublication(inventory).projects.map(p=>({name:p.name,description:p.description,href:p.url,imagePath:p.imagePath||'',tech:p.platform})):parseProjects(await readFile(join(workspace, 'README.md'), 'utf8'));
     const aliases = ['xiaohuayu', 'inspire', 'sticker-web', 'tale-loop', 'xiaoshiye'];
     // Match by destination, never by the position of a README table cell.
     const domains = ['xiaohuayu.', 'inspire.', 'sticker.', 'taleloop.', 'xiaoshiye.'];
     return Object.fromEntries(rows.flatMap(r => {
       const index = domains.findIndex(domain => new URL(r.href).hostname.startsWith(domain));
-      return index < 0 ? [] : [[aliases[index], { name: r.name.replace(/^[\p{Extended_Pictographic}\uFE0F]+\s+/u, ''), description: r.description, url: r.href, image: r.imagePath.slice('assets/'.length), platform: r.tech }]];
+      const alias=index<0&&inventory&&r.imagePath?basename(r.imagePath,extname(r.imagePath)):aliases[index];
+      return !alias ? [] : [[alias, { name: r.name.replace(/^[\p{Extended_Pictographic}\uFE0F]+\s+/u, ''), description: r.description, url: r.href, image: r.imagePath.slice('assets/'.length), platform: r.tech }]];
     }));
   } catch { return {}; }
 }

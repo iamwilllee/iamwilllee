@@ -1,6 +1,6 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, realpath } from 'node:fs/promises';
 import { renderSite, safeUrl } from '../skills/portfolio-builder/scripts/core.mjs';
-import { basename, dirname, join, resolve } from 'node:path';
+import { basename, dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -78,15 +78,53 @@ export function renderPortfolio(markdown) {
   return renderSite({ profile }, projects);
 }
 
+export function publicationFromReadme(markdown) {
+  return {schemaVersion:1,profile:parseProfile(markdown),projects:parseProjects(markdown).map(p=>({
+    name:p.name,description:p.description,platform:p.tech,url:p.href,imagePath:p.siteImagePath||p.imagePath,
+    ...(/AI/.test(p.alt)?{imageSource:'AI 概念配图'}:{}),
+  }))};
+}
+
+export function validatePublication(data) {
+  const fields=(obj,keys)=>{if(!obj||typeof obj!=='object'||Array.isArray(obj)||Object.keys(obj).some(k=>!keys.includes(k)))throw Error('公开站点清单包含未知字段。');};
+  const text=(value,max)=>{if(typeof value!=='string'||!value.trim()||value.length>max)throw Error('公开站点清单文本不完整或过长。');return value;};
+  fields(data,['schemaVersion','profile','projects']);
+  if(data.schemaVersion!==1||!Array.isArray(data.projects)||!data.projects.length||data.projects.length>1000)throw Error('公开站点清单版本或项目数量不正确。');
+  fields(data.profile,['name','headline','bio','github']);
+  const profile={name:text(data.profile.name,80),headline:text(data.profile.headline,180),bio:text(data.profile.bio,600),github:safeUrl(data.profile.github)};
+  if(!profile.github)throw Error('公开站点清单需要有效 GitHub 主页。');
+  const projects=data.projects.map(p=>{
+    fields(p,['name','description','platform','url','imagePath','imageSource']);
+    const url=safeUrl(p.url);if(!url)throw Error('公开站点项目需要有效入口。');
+    const project={name:text(p.name,100),description:text(p.description,600),platform:text(p.platform||'独立作品',100),url};
+    if(p.imagePath!==undefined){
+      if(typeof p.imagePath!=='string'||!/^assets\/[a-zA-Z0-9_./-]+\.(?:png|jpg|jpeg|webp|svg)$/.test(p.imagePath)||p.imagePath.split('/').some(part=>!part||part==='.'||part==='..'))throw Error('站点配图必须位于根目录 assets/。');
+      project.imagePath=p.imagePath;
+    }
+    if(p.imageSource!==undefined)project.imageSource=text(p.imageSource,80);
+    return project;
+  });
+  return {schemaVersion:1,profile,projects};
+}
+
+export function renderPublication(data) {
+  return renderSite({profile:data.profile},data.projects.map(p=>({...p,image:p.imagePath?basename(p.imagePath):undefined,private:true})));
+}
+
 export async function sync({ workspace = repositoryRoot, check = checkOnly } = {}) {
-  const markdown = await readFile(join(workspace, 'README.md'), 'utf8');
-  const projects = parseProjects(markdown);
-  const files = new Map([['index.html', Buffer.from(renderPortfolio(markdown))]]);
+  // The explicit public inventory is independent of the Profile's visual layout.
+  // Only a missing inventory uses the legacy README migration path; invalid JSON fails.
+  const raw=await readFile(join(workspace,'portfolio-data.json'),'utf8').catch(error=>{if(error.code==='ENOENT')return null;throw error;});
+  const data=validatePublication(raw===null?publicationFromReadme(await readFile(join(workspace,'README.md'),'utf8')):JSON.parse(raw));
+  const projects=data.projects;
+  const files = new Map([['index.html', Buffer.from(renderPublication(data))]]);
   for (const file of ['site.css', 'site.js', 'favicon.svg']) files.set(file, await readFile(new URL(`../skills/portfolio-builder/assets/${file}`, import.meta.url)));
   for (const project of projects) {
-    const imagePath = project.siteImagePath || project.imagePath;
-    const target = `assets/${basename(imagePath)}`, bytes = await readFile(join(workspace, imagePath));
-    if (files.has(target) && !files.get(target).equals(bytes)) throw new Error(`存在不同内容的同名配图：${project.imageName}`);
+    const imagePath=project.imagePath;if(!imagePath)continue;
+    const source=await realpath(join(workspace,imagePath));
+    if(!source.startsWith(await realpath(workspace)+sep))throw Error('站点配图链接超出项目目录。');
+    const target = `assets/${basename(imagePath)}`, bytes = await readFile(source);
+    if (files.has(target) && !files.get(target).equals(bytes)) throw new Error(`存在不同内容的同名配图：${project.imagePath}`);
     files.set(target, bytes);
   }
   const output = join(workspace, 'portfolio');
@@ -94,13 +132,13 @@ export async function sync({ workspace = repositoryRoot, check = checkOnly } = {
     const path = join(output, file);
     if (check) {
       const current = await readFile(path).catch(error => { if (error.code === 'ENOENT') return null; throw error; });
-      if (!current?.equals(bytes)) throw new Error(`Portfolio 与 README / 共享模板不一致：${file}，请运行 pnpm sync:portfolio。`);
+      if (!current?.equals(bytes)) throw new Error(`Portfolio 与公开清单 / 共享模板不一致：${file}，请运行 pnpm sync:portfolio。`);
     } else {
       await mkdir(dirname(path), { recursive: true });
       await writeFile(path, bytes);
     }
   }
-  console.log(`${check ? 'Portfolio 已同步' : '已从 README.md 同步到 Portfolio'}（${projects.length} 个项目）。`);
+  console.log(`${check ? 'Portfolio 已同步' : '已从公开项目资料同步到 Portfolio'}（${projects.length} 个项目）。`);
 }
 
 if (resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)) {
