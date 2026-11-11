@@ -25,8 +25,8 @@
 </tr>
 <tr>
 <td width="50%" valign="top">
-<a href="https://perch.iamwilllee.com/"><img src="assets/project-covers/perch.png" alt="栖栏 · Perch · 项目概念配图" width="360"></a>
-<h3><a href="https://perch.iamwilllee.com/">栖栏 · Perch</a></h3>
+<a href="https://perch.iamwilllee.com/"><img src="assets/project-covers/perch.png" alt="Perch · 项目概念配图" width="360"></a>
+<h3><a href="https://perch.iamwilllee.com/">Perch</a></h3>
 <p>Mac 顶部图标栏</p>
 <sub>macOS 14+ · 原生菜单栏 · Apple Silicon</sub>
 </td>
@@ -42,11 +42,11 @@
 ## 也在做这些
 
 <p><b>研究与创作</b><br>
-<a href="https://cluefolio.iamwilllee.com/">Cluefolio · 迹册</a> · <a href="https://lefio.iamwilllee.com/">留页 · Lefio</a> · <a href="https://inspire.iamwilllee.com/">灵感图鉴</a> · <a href="https://realcut.iamwilllee.com/">RealCut</a>
+<a href="https://cluefolio.iamwilllee.com/">迹册 - Cluefolio</a> · <a href="https://lefio.iamwilllee.com/">留页 - Lefio</a> · <a href="https://inspire.iamwilllee.com/">成帖 - Postfold</a> · <a href="https://realcut.iamwilllee.com/">RealCut</a>
 </p>
 
 <p><b>亲子与家庭</b><br>
-<a href="https://xiaohuayu.iamwilllee.com/">小画屿</a> · <a href="https://taleloop.iamwilllee.com/">跟读岛 TaleLoop</a> · <a href="https://xiaoshiye.iamwilllee.com/">小拾页</a>
+<a href="https://xiaohuayu.iamwilllee.com/">小画屿 - Little Art Isle</a> · <a href="https://taleloop.iamwilllee.com/">跟读岛 - TaleLoop</a> · <a href="https://xiaoshiye.iamwilllee.com/">小拾页</a>
 </p>
 
 <p><b>日常工具</b><br>

@@ -17,6 +17,10 @@ if(command==='request'){
 }else if(command==='record-check'){
  const state=await act(workspace,{type:'record-check',repo:option('--repo'),sourceSha:option('--source-sha'),pushedAt:option('--pushed-at'),needsUpdate:process.argv.includes('--needs-update'),summary:option('--summary')});
  console.log(JSON.stringify(state.projects.find(p=>p.repo===option('--repo')).lastUpdateCheck,null,2));
+}else if(command==='rename-project'){
+ const state=await act(workspace,{type:command,repo:option('--repo'),name:option('--name')});
+ const p=state.projects.find(p=>p.repo===option('--repo'));
+ console.log(JSON.stringify({saved:true,repo:p.repo,name:p.name,revision:state.revision}));
 }else if(command==='import'){
  const state=await importDraft(workspace,{repo:option('--repo'),requestId:option('--request'),folder:option('--draft'),sourceSha:option('--source-sha')});
  console.log(JSON.stringify({saved:true,revision:state.revision,preview:'http://127.0.0.1:4318/'}));
@@ -26,4 +30,4 @@ if(command==='request'){
  console.log(JSON.stringify({saved:true,revision:state.revision,siteCovers:state.projects.filter(p=>p.siteCover).length}));
 }else if(['generate-profile','generate-site'].includes(command)){
  const state=await act(workspace,{type:command});console.log(JSON.stringify(state.results[command.slice(9)],null,2));
-}else throw Error('支持 request、plan、sync、record-check、import、import-site-covers、generate-profile、generate-site。');
+}else throw Error('支持 request、plan、sync、record-check、rename-project、import、import-site-covers、generate-profile、generate-site。');

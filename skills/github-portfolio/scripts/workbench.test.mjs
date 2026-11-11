@@ -224,3 +224,29 @@ test('Profile presentation persists without changing website selection, descript
   assert.doesNotMatch(JSON.stringify(data),/INTERNAL_SOURCE_ONLY|sourceSha|draftHash|github.com\/owner\/(?:runo|xiaohuayu)/);
  }finally{await rm(root,{recursive:true,force:true});}
 });
+
+test('a verified display rename survives inventory refresh without adopting drafts, changing covers or resuming optimization',async()=>{
+ const {root,state}=await fixture();
+ try{
+  const project=state.projects[0],other=state.projects[1];
+  let next=await act(root,{type:'generate-profile',revision:state.revision});
+  next=await act(root,{type:'generate-site',revision:next.revision});
+  next=await act(root,{type:'request',repo:other.repo,project:input(other),revision:next.revision});
+  next=await act(root,{type:'optimization',repo:project.repo,enabled:false,revision:next.revision});
+  const before=structuredClone(next),name='小画屿 - Little Art Isle';
+  await assert.rejects(act(root,{type:'rename-project',repo:project.repo,name:' ',revision:next.revision}),/展示名称/);
+  assert.equal((await readState(root)).revision,before.revision);
+  next=await act(root,{type:'rename-project',repo:project.repo,name,revision:next.revision});
+  const renamed=next.projects[0];
+  assert.deepEqual(renamed,{...before.projects[0],name,approved:{...before.projects[0].approved,name}});
+  assert.deepEqual(next.requests,before.requests);assert.deepEqual(next.profileRepos,before.profileRepos);assert.deepEqual(next.siteRepos,before.siteRepos);
+  assert.equal(clientState(next).results.profile.stale,true);assert.equal(clientState(next).results.site.stale,true);
+  next=await refreshInventory(root,before.projects.map(p=>p.repository));
+  assert.equal(next.projects[0].name,name);assert.equal(next.projects[0].approved.name,name);assert.equal(next.projects[0].optimizationEnabled,false);
+  next=await act(root,{type:'generate-profile',revision:next.revision});
+  next=await act(root,{type:'generate-site',revision:next.revision});
+  assert.ok((await readFile(join(stateRoot(root),'profile/README.md'),'utf8')).includes(name));
+  assert.ok((await readFile(join(stateRoot(root),'site/index.html'),'utf8')).includes(name));
+  assert.equal(clientState(next).results.profile.stale,false);assert.equal(clientState(next).results.site.stale,false);
+ }finally{await rm(root,{recursive:true,force:true});}
+});

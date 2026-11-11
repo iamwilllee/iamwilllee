@@ -121,3 +121,17 @@ node skills/github-portfolio/scripts/cli.mjs generate-site --workspace .
 当前 12 个作品中，Aster、Makenue、栖栏 · Perch、Runo 作为四个精选；其他八个按“研究与创作 / 亲子与家庭 / 日常工具”分类。所有文字和入口仍为原生 GitHub Markdown / HTML，图片最多四张，复用现有封面；Runo 的 Profile 原图与网站 16:9 配图分别保留。
 
 配置保存在 `profileLayout.featuredRepos` 与 `profileLayout.entries`，生成器兼容此前没有版式配置的状态，默认精选四个。取消 Profile 勾选代表不展示，与 README 优化开关、上站选择互不影响。修改分类、短介绍或精选只使 Profile 预览过期，不要求重新生成网站。
+
+## 项目品牌改名（手动核对）
+
+电脑目录名、Codex 侧栏名称、GitHub 仓库标识和作品集展示名称分别保存。改目录或刷新仓库清单，不会自动改写已确认的公开文案；站点网页刷新也只会显示最近部署的内容。
+
+用户要求匹配项目名称时，先核对当前代码 / 品牌配置 / README，再按固定仓库标识匹配。仅改展示名称时使用以下命令，避免重新采用草稿而替换封面或草稿状态：
+
+```sh
+node skills/github-portfolio/scripts/cli.mjs rename-project --workspace . --repo iamwilllee/inspire --name '成帖 - Postfold'
+node skills/github-portfolio/scripts/cli.mjs generate-profile --workspace .
+node skills/github-portfolio/scripts/cli.mjs generate-site --workspace .
+```
+
+随后将核对后的名称同步到根 `portfolio-data.json` 与根 Profile README，再执行 `pnpm sync:portfolio` 和 `pnpm check:portfolio`。生成保留既有项目数量、精选、分类、入口及图片；不同仓库的独立产品不能因名称相似而合并。用户授权提交与发布后再 push / 部署。本流程没有定时刷新或自动重新分析品牌。

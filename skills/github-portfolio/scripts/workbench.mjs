@@ -161,6 +161,13 @@ export async function act(workspace,input){
    await generateOutput(state,root,input.type==='generate-profile'?'profile':'site');return;
   }
   const p=projectFor(state,input.repo);
+  if(input.type==='rename-project'){
+   const name=text(input.name,100);
+   if(!name)throw Error('请填写项目展示名称。');
+   p.name=name;
+   if(p.approved)p.approved.name=name;
+   return;
+  }
   if(input.type==='record-check'){
    requireOptimization(p);
    if(!/^[a-f0-9]{40,64}$/.test(input.sourceSha||''))throw Error('请提供已核对的完整提交 SHA。');
