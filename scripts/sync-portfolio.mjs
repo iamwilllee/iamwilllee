@@ -139,9 +139,11 @@ export async function sync({ workspace = repositoryRoot, check = checkOnly } = {
       await writeFile(path, bytes);
     }
   }
-  console.log(`${check ? 'Portfolio 已同步' : '已从公开项目资料同步到 Portfolio'}（${projects.length} 个项目）。`);
+  // Keep CLI output outside the reusable operation (also imported by tests).
+  return { count: projects.length, checked: check };
 }
 
 if (resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)) {
-  await sync();
+  const result = await sync();
+  console.log(`${result.checked ? 'Portfolio 已同步' : '已从公开项目资料同步到 Portfolio'}（${result.count} 个项目）。`);
 }
