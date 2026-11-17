@@ -16,6 +16,15 @@ test('从 README 表格解析并规范化项目数据，保留嵌套配图路径
   }]);
 });
 
+test('公开资料允许无入口的项目介绍与用途分类，但拒绝无效或缺失 URL', () => {
+  const data=publicationFromReadme(fixture);
+  const project={...data.projects[0],url:'',category:'效率工具'};
+  assert.equal(validatePublication({...data,projects:[project]}).projects[0].category,'效率工具');
+  for(const url of [undefined,'javascript:alert(1)','https://user:password@example.com']){
+    assert.throws(()=>validatePublication({...data,projects:[{...project,url}]}),/入口/);
+  }
+});
+
 test('正式站点复用作品集模板，并从 README 读取个人介绍和项目资料', () => {
   assert.deepEqual(parseProfile(fixture), {name:'Maker',headline:'把想法做成产品。',bio:'从日常的问题出发。',github:'https://github.com/owner'});
   const html = renderPortfolio(fixture);

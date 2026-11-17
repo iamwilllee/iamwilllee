@@ -93,6 +93,7 @@ function publicFields(input){
 }
 function updateProject(p,input){
  Object.assign(p,publicFields(input));
+  if(input.category!==undefined)p.category=text(input.category,40);
  p.design={direction:text(input.direction||p.design.direction,600),keepCover:!!input.keepCover,keepCopy:!!input.keepCopy,notes:text(input.notes||'',2000)};
  if(!p.design.direction)throw Error('请填写项目主题方向。');
 }
@@ -118,7 +119,7 @@ function publicProjects(state,target){
   if(!a)throw Error(`请先在项目详情确认「${p.name}」的展示资料。`);
   const privateLink=p.repository.private&&a.url.startsWith(p.repository.html_url);
   const url=privateLink?'':safeUrl(a.url)||(p.repository.private?'':safeUrl(p.repository.html_url));
-  return {repo:p.repo,id:p.id,name:a.name,description:a.description,platform:a.platform,url,cover:target==='site'&&p.siteCover?p.siteCover.file:a.cover,imageSource:target==='site'&&p.siteCover?p.siteCover.source:undefined,private:!!p.repository.private,html_url:p.repository.html_url,language:p.repository.language||'',confirmedAt:a.confirmedAt};
+  return {repo:p.repo,id:p.id,name:a.name,description:a.description,platform:a.platform,...(p.category?{category:p.category}:{}),url,cover:target==='site'&&p.siteCover?p.siteCover.file:a.cover,imageSource:target==='site'&&p.siteCover?p.siteCover.source:undefined,private:!!p.repository.private,html_url:p.repository.html_url,language:p.repository.language||'',confirmedAt:a.confirmedAt};
  });
 }
 export function outputSignature(state,target){
@@ -140,11 +141,10 @@ export async function generateOutput(state,root,target){
    const html=renderSite({profile:state.profile},projects);
    await writeFile(join(staging,'index.html'),html);
    // A portable, public-only website source. Do not serialize repository records.
-   const data={schemaVersion:1,profile:{name:state.profile.name,headline:state.profile.headline,bio:state.profile.bio,github:state.profile.github},projects:projects.map(p=>({name:p.name,description:p.description,platform:p.platform,url:p.url,...(p.image?{imagePath:`assets/${p.image}`}:{ }),...(p.imageSource?{imageSource:p.imageSource}:{ })}))};
+   const data={schemaVersion:1,profile:{name:state.profile.name,headline:state.profile.headline,bio:state.profile.bio,github:state.profile.github},projects:projects.map(p=>({name:p.name,description:p.description,platform:p.platform,...(p.category?{category:p.category}:{}),url:p.url,...(p.image?{imagePath:`assets/${p.image}`}:{ }),...(p.imageSource?{imageSource:p.imageSource}:{ })}))};
    await writeFile(join(staging,'portfolio-data.json'),JSON.stringify(data,null,2)+'\n');
    for(const file of ['site.css','site.js','favicon.svg'])await copyFile(new URL(`../../portfolio-builder/assets/${file}`,import.meta.url),join(staging,file));
   }else{
-   if(projects.some(p=>!p.url))throw Error('Profile 展示项目需要公开产品入口，或可公开访问的源码链接。请先补充项目入口。');
    const layout=profileLayout(state.profileRepos,state.profileLayout);
    const markdown=renderProfile(state.profile,projects.map(p=>({...p,image:p.image?`assets/${p.image}`:undefined})),layout);
    await writeFile(join(staging,'README.md'),markdown);

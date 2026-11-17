@@ -25,6 +25,23 @@ test('visitor HTML escapes repository content and omits private source links', (
   assert.ok(publicHtml.includes(repo.html_url));
 });
 
+test('explicit purposes group different platforms together and escape category labels', () => {
+  const html = renderSite(config, [
+    {...repo, name:'Desktop', description:'Launcher', platform:'macOS', category:'效率工具', url:''},
+    {...repo, name:'Extension', description:'Capture', platform:'Chrome', category:'效率工具', url:''},
+    {...repo, name:'Research', description:'Archive', platform:'Web', category:'研究与创作 <catalog>', url:''},
+    {...repo, name:'Unsorted', description:'Other', platform:'Web', url:''},
+  ]);
+  assert.equal((html.match(/data-filter="group-0"/g)||[]).length,1);
+  assert.equal((html.match(/data-categories="group-0"/g)||[]).length,2);
+  assert.match(html,/按用途筛选作品/);
+  assert.match(html,/研究与创作 &lt;catalog&gt;/);
+  assert.match(html,/data-search="desktop launcher macos 效率工具"/);
+  assert.match(html,/其他作品/);
+  assert.doesNotMatch(html,/data-filter="(?:web|desktop)"/);
+  assert.match(html,/暂无公开入口/);
+});
+
 test('generation reuses unchanged README, persists edits, and preserves last site on a provider failure', async () => {
   const root = await mkdtemp(join(tmpdir(), 'portfolio-builder-test-'));
   try {

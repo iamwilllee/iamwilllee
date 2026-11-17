@@ -1,10 +1,10 @@
 # Will Lee
 
-**把想法，做成小产品。**
+**A Mini Builder.**
 
-从一个具体的问题开始，做成可以使用的东西。
+👨｜👧
 
-[个人站点 ↗](https://iamwilllee.github.io/iamwilllee/) · [GitHub](https://github.com/iamwilllee)
+[个人站点 ↗](https://iamwilllee.com/) · [GitHub](https://github.com/iamwilllee)
 
 ## 精选作品
 
@@ -42,15 +42,15 @@
 ## 也在做这些
 
 <p><b>研究与创作</b><br>
-<a href="https://cluefolio.iamwilllee.com/">迹册 - Cluefolio</a> · <a href="https://lefio.iamwilllee.com/">留页 - Lefio</a> · <a href="https://inspire.iamwilllee.com/">成帖 - Postfold</a> · <a href="https://realcut.iamwilllee.com/">RealCut</a>
+<a href="https://cluefolio.iamwilllee.com/">迹册 - Cluefolio</a> · <a href="https://lefio.iamwilllee.com/">留页 - Lefio</a>
+</p>
+
+<p><b>效率工具</b><br>
+<a href="https://github.com/iamwilllee/capx">Capx</a> · CapMind · 事项助手 <sub>（暂无公开入口）</sub>
 </p>
 
 <p><b>亲子与家庭</b><br>
 <a href="https://xiaohuayu.iamwilllee.com/">小画屿 - Little Art Isle</a> · <a href="https://taleloop.iamwilllee.com/">跟读岛 - TaleLoop</a> · <a href="https://xiaoshiye.iamwilllee.com/">小拾页</a>
 </p>
 
-<p><b>日常工具</b><br>
-<a href="https://sticker.iamwilllee.com/">切切贴</a>
-</p>
-
-[浏览完整作品集 →](https://iamwilllee.github.io/iamwilllee/)
+[浏览完整作品集 →](https://iamwilllee.com/)

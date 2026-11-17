@@ -200,6 +200,28 @@ test('Profile uses at most four featured images and keeps every other project as
  assert.throws(()=>profileLayout(['owner/1'],{featuredRepos:[],entries:{'owner/1':{group:'bad\nheading'}}}),/格式/);
 });
 
+test('a private project without a public entry keeps its purpose through both outputs without leaking its repository',async()=>{
+ const {root,state}=await fixture();
+ try{
+  const p=state.projects[0],approved=structuredClone(p.approved);
+  let next=await act(root,{type:'project',repo:p.repo,project:{...input(p),category:'效率工具'}});
+  assert.deepEqual(next.projects[0].approved,approved);
+  next=await act(root,{type:'adopt',repo:p.repo,project:{...input(next.projects[0]),url:''}});
+  next=await act(root,{type:'adopt',repo:next.projects[1].repo,project:{...input(next.projects[1]),description:'Approved launcher'}});
+  next=await act(root,{type:'config',profile:next.profile,profileRepos:next.siteRepos,siteRepos:next.siteRepos,profileLayout:{featuredRepos:[next.siteRepos[1]],entries:{[p.repo]:{group:'效率工具'}}}});
+  next=await act(root,{type:'generate-profile'});
+  next=await act(root,{type:'generate-site'});
+  const markdown=await readFile(join(stateRoot(root),'profile/README.md'),'utf8');
+  const data=validatePublication(JSON.parse(await readFile(join(stateRoot(root),'site/portfolio-data.json'),'utf8')));
+  assert.equal(data.projects[0].url,'');assert.equal(data.projects[0].category,'效率工具');
+  assert.match(markdown,/效率工具/);assert.match(markdown,/暂无公开入口/);
+  assert.doesNotMatch(markdown,/href=""|github.com\/owner\/xiaohuayu|INTERNAL_SOURCE_ONLY/);
+  const featured=renderProfile(next.profile,[{repo:p.repo,name:'No entry',url:'',image:'assets/cover.svg'}],{featuredRepos:[p.repo]});
+  assert.match(featured,/<h3>No entry<\/h3>/);assert.doesNotMatch(featured,/href=""/);
+  assert.doesNotMatch(JSON.stringify(data),/sourceSha|draftHash|github.com\/owner\/xiaohuayu/);
+ }finally{await rm(root,{recursive:true,force:true});}
+});
+
 test('Profile presentation persists without changing website selection, descriptions, covers or freshness',async()=>{
  const {root,state}=await fixture();
  try{

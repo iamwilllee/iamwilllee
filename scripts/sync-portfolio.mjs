@@ -94,9 +94,10 @@ export function validatePublication(data) {
   const profile={name:text(data.profile.name,80),headline:text(data.profile.headline,180),bio:text(data.profile.bio,600),github:safeUrl(data.profile.github)};
   if(!profile.github)throw Error('公开站点清单需要有效 GitHub 主页。');
   const projects=data.projects.map(p=>{
-    fields(p,['name','description','platform','url','imagePath','imageSource']);
-    const url=safeUrl(p.url);if(!url)throw Error('公开站点项目需要有效入口。');
+    fields(p,['name','description','platform','category','url','imagePath','imageSource']);
+    const url=safeUrl(p.url);if(typeof p.url!=='string'||(p.url&&!url))throw Error('公开站点项目需要有效入口，暂无入口时请留空。');
     const project={name:text(p.name,100),description:text(p.description,600),platform:text(p.platform||'独立作品',100),url};
+    if(p.category!==undefined)project.category=text(p.category,40);
     if(p.imagePath!==undefined){
       if(typeof p.imagePath!=='string'||!/^assets\/[a-zA-Z0-9_./-]+\.(?:png|jpg|jpeg|webp|svg)$/.test(p.imagePath)||p.imagePath.split('/').some(part=>!part||part==='.'||part==='..'))throw Error('站点配图必须位于根目录 assets/。');
       project.imagePath=p.imagePath;
